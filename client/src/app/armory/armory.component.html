@@ -1,0 +1,36 @@
+<mat-card>
+<div class="armory">
+
+  <div class="storage">
+    Equipped: <br>
+    <ul style="list-style: none;">
+      <li *ngFor="let item of equippedItems">
+        <div class="tooltip">{{item.name}}<br>
+          <span class="tooltiptext">
+            <ul style="list-style: none;">
+              <li *ngFor="let line of showItemDetails(item, 'equipped')">
+                {{line}}
+              </li>
+            <button mat-mini-button (click)="takeOff(item)">Take off</button> </ul>
+          </span>
+        </div>
+      </li>
+    </ul>
+    <br>
+    Armory:
+    <ul style="list-style: none;">
+    <li *ngFor="let item of armory; let i = index">
+      <div class="tooltip">{{item.name}}<br>
+        <span class="tooltiptext">
+              <ul style="list-style: none;">
+                <li *ngFor="let line of showItemDetails(item, 'armory')">
+                  {{line}}
+                  </li>
+                  <button mat-mini-button (click)="equip(item)">Equip</button> </ul>
+              </span>
+      </div>
+    </li>
+    </ul>
+  </div>
+</div>
+</mat-card>

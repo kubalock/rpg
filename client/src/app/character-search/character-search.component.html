@@ -1,0 +1,10 @@
+<mat-card>
+<div class="search">
+
+    <ul>
+    <li *ngFor="let hero of heroes">
+      <a mat-button [routerLink]="['/character', hero.char_id]">{{hero.char_name}}</a>
+    </li>
+    </ul>
+  </div>
+</mat-card>

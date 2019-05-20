@@ -1,0 +1,56 @@
+<mat-card>
+  <div *ngIf="!isFight">
+<div class="char_info"><br>
+{{hero.char_name}} <br>
+Class: {{hero.char_class}} <br>
+Level: {{hero.level}} <br>
+  </div> <br>
+<div class="fight_button">
+<button (click)="fight()">Fight</button>
+</div>
+<div class="char_basics"><br>
+  Health: {{calcHP()}}<br>
+  Strength: {{hero.strength}} <br>
+  Agility: {{calcAgility()}}<br>
+  Intelligence: {{calcIntelligence()}} <br>
+  Endurance: {{calcEndurance()}}<br>
+  Luck: {{hero.luck}} <br>
+  </div> <br>
+  <div class="aggro_stats">
+    Damage: {{calcMinDmg()}} - {{calcMaxDmg()}}<br>
+    <div *ngIf="coldDamage">Cold Damage: {{calcMinCold()}} - {{calcMaxCold()}}<br></div>
+    <div *ngIf="fireDamage">Fire Damage: {{calcMinFire()}} - {{calcMaxFire()}}<br></div>
+    <div *ngIf="electricDamage">Electric Damage: {{calcMinElectric()}} - {{calcMaxElectric()}}<br></div>
+    <div *ngIf="bleedDamage">Bleed per round: {{calcMinBleed()}} - {{calcMaxBleed()}}<br></div>
+    <div *ngIf="poisonDamage">Poison per round: {{calcMinPoison()}} - {{calcMaxPoison()}}<br></div>
+    Stun chance: {{hero.stun_chance}}%<br>
+    Attack speed: {{hero.attack_speed}}%<br>
+    </div> <br>
+  <div class="char_other">
+    Defense: {{calcDefense()}} <br>
+    Health Regen: {{calcHealthRegen()}} / round <br>
+    Block chance: {{hero.block_chance}}%<br>
+    Block: {{hero.block}} <br>
+    Ignored dmg: {{hero.ignore_dmg_percent}}%<br>
+    Offensive Ability: {{calcOffAbility()}} <br>
+    Defensive Ability: {{calcDefAbility()}} <br>
+    </div> <br>
+  <div class="char_resists">
+    Resistances: <br>
+    Fire: {{hero.res_fire}}%<br>
+    Cold: {{hero.res_cold}}%<br>
+    Electric: {{hero.res_electric}}%<br>
+    Poison: {{hero.res_poison}}%<br>
+    Bleed: {{hero.res_bleed}}%<br>
+    Stun: {{hero.res_stun}}%<br>
+    </div>
+    </div>
+
+    <div *ngIf="isFight">
+      <ul>
+      <li *ngFor="let round of fightResult">
+        {{round}}
+      </li>
+      </ul>
+    </div>
+    </mat-card>

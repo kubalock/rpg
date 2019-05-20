@@ -1,0 +1,48 @@
+.character {
+  text-align: center;
+}
+
+.char_info {
+  border-style: inset;
+  border-color: red;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  width: 300px;
+}
+
+.aggro_stats {
+  border-style: inset;
+  border-color: red;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  width: 300px;
+}
+
+.char_basics {
+  border-style: inset;
+  border-color: red;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  width: 300px;
+}
+
+.char_other {
+  border-style: inset;
+  border-color: red;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  width: 300px;
+}
+
+.char_resists {
+  border-style: inset;
+  border-color: red;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  width: 300px;
+}

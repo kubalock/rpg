@@ -1,0 +1,72 @@
+<mat-card>
+  <div *ngIf="!haveCharacter">
+  <form #createForm="ngForm" (ngSubmit)="createCharacter(createForm)">
+    <mat-card-header>
+      <mat-card-title><h2>Create your character</h2></mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput ngModel required name="name" placeholder="name"
+        #name="ngModel">
+      </mat-form-field>
+      <br>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </mat-card-actions>
+    <mat-card-footer>
+    </mat-card-footer>
+  </form>
+  </div>
+  <div class="characterPage" *ngIf="haveCharacter">
+    <div class="character">
+      Character Info <br>
+    <div class="char_info"><br>
+    {{hero.char_name}} <br>
+    Class: {{hero.char_class}} <br>
+    Level: {{hero.level}} <br>
+    Experience: {{hero.experience}} / {{hero.next_level}} <br>
+    <button *ngIf="enoughExp" mat-button (click)="levelUp()">Level Up!</button><br>
+      </div> <br>
+    <div class="char_basics"><br>
+      Health: {{calcHP()}} <button *ngIf="charPoints" mat-mini-button (click)="addHealth()">+</button><br>
+      Strength: {{hero.strength}} <button *ngIf="charPoints" mat-mini-button (click)="addStrength()">+</button><br>
+      Agility: {{calcAgility()}} <button *ngIf="charPoints" mat-mini-button (click)="addDexterity()">+</button><br>
+      Intelligence: {{calcIntelligence()}} <button *ngIf="charPoints" mat-mini-button (click)="addIntelligence()">+</button><br>
+      Endurance: {{calcEndurance()}} <button *ngIf="charPoints" mat-mini-button (click)="addEndurance()">+</button><br>
+      Luck: {{hero.luck}} <br>
+      Character points: {{hero.points}} <br>
+      Mastery points: {{hero.mastery_points}} <br>
+      <button *ngIf="submitPoints" mat-button (click)="enterPoints()">Submit points</button><br>
+      </div> <br>
+      <div class="aggro_stats">
+        Damage: {{calcMinDmg()}} - {{calcMaxDmg()}}<br>
+        <div *ngIf="coldDamage">Cold Damage: {{calcMinCold()}} - {{calcMaxCold()}}<br></div>
+        <div *ngIf="fireDamage">Fire Damage: {{calcMinFire()}} - {{calcMaxFire()}}<br></div>
+        <div *ngIf="electricDamage">Electric Damage: {{calcMinElectric()}} - {{calcMaxElectric()}}<br></div>
+        <div *ngIf="bleedDamage">Bleed per round: {{calcMinBleed()}} - {{calcMaxBleed()}}<br></div>
+        <div *ngIf="poisonDamage">Poison per round: {{calcMinPoison()}} - {{calcMaxPoison()}}<br></div>
+        Stun chance: {{hero.stun_chance}}%<br>
+        Attack speed: {{hero.attack_speed}}%<br>
+        </div> <br>
+      <div class="char_other">
+        Defense: {{calcDefense()}} <br>
+        Health Regen: {{calcHealthRegen()}} / round <br>
+        Block chance: {{hero.block_chance}}%<br>
+        Block: {{hero.block}} <br>
+        Ignored dmg: {{hero.ignore_dmg_percent}}%<br>
+        Offensive Ability: {{calcOffAbility()}} <br>
+        Defensive Ability: {{calcDefAbility()}} <br>
+        </div> <br>
+      <div class="char_resists">
+        Resistances: <br>
+        Fire: {{hero.res_fire}}%<br>
+        Cold: {{hero.res_cold}}%<br>
+        Electric: {{hero.res_electric}}%<br>
+        Poison: {{hero.res_poison}}%<br>
+        Bleed: {{hero.res_bleed}}%<br>
+        Stun: {{hero.res_stun}}%<br>
+        </div>
+        </div>
+    </div>
+</mat-card>

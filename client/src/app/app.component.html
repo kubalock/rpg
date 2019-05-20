@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+  <span>Welcome to {{title}}!</span>
+</mat-toolbar>
+<div class="container">
+  <ul class="nav nav-pills">
+    <li><a routerLinkActive="active" routerLink="/index">Home</a></li>
+    <li *ngIf="!isLoggedIn"><a routerLinkActive="active" routerLink="/login">Login</a></li>
+    <li *ngIf="isLoggedIn"><button (click)="logout()">Logout</button></li>
+    <li *ngIf="!isLoggedIn"><a routerLinkActive="active" routerLink="/register">Register</a></li>
+  </ul>
+</div>
+<div *ngIf="isLoggedIn" class="loggedOptions">
+  <ul class="nav nav-pills">
+    <li><a routerLinkActive="active" routerLink="/dashboard">Dashboard</a></li>
+    <li><a routerLinkActive="active" routerLink="/character">Character</a></li>
+    <li><a routerLinkActive="active" routerLink="/mastery">Mastery</a></li>
+    <li><a routerLinkActive="active" routerLink="/armory">Armory</a></li>
+    <li><a routerLinkActive="active" routerLink="/search">Search Opponents</a></li>
+    <li><a routerLinkActive="active" routerLink="/explore">Explorations</a><li>
+    </ul>
+  </div>
+<div class="container">
+<router-outlet></router-outlet>
+</div>

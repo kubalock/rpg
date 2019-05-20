@@ -1,0 +1,27 @@
+<div class="tooltip">{{heroInfo[0]}}<br>
+  <span class="tooltiptext">
+    <ul style="list-style: none;">
+      <li *ngFor="let info of heroInfo">
+        {{info}}
+        </li>
+        </ul></span>
+</div>
+
+<ul style="list-style: none;">
+  <li *ngFor="let monster of monstersInfo">
+    <div class="tooltip">{{monster[0]}}<br>
+      <span class="tooltiptext">
+        <ul style="list-style: none;">
+          <li *ngFor="let info of monster">
+            {{info}}
+            </li>
+            </ul></span>
+    </div>
+    </li>
+    </ul>
+
+<ul style="list-style: none;">
+<li *ngFor="let round of fightResult">
+  {{round}}
+</li>
+</ul>

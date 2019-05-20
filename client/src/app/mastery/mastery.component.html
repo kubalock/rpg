@@ -1,0 +1,62 @@
+<mat-card>
+  <div class="mastery">
+
+  <div *ngIf="!firstMastery">
+    Level up to unblock masteries!
+    </div>
+  <div *ngIf="firstMastery" class="firstMastery">
+            <div *ngIf="allMasteries">
+                <mat-list-item *ngFor="let mastery of allMasteries">
+                    <a mat-button [routerLink]="">{{mastery.mastery_name}}</a><br>
+                      <a mat-button (click)="selectMastery(mastery.mastery_id)">Select mastery</a> <br>
+                      <br>
+                </mat-list-item>
+            </div>
+
+            Points to spend: {{hero.mastery_points}} <br><br>
+
+            <div *ngIf="firstMasteryChosen">
+            {{masteryOne.mastery_name}} <br><br>
+            Level {{masteryOneLevel.mastery_level}} / 32 <button *ngIf="masteryPoints" mat-mini-button (click)="levelMasteryOne()">+</button><br><br>
+            Current bonus: +{{calcBonusHPOne()}} Health, +{{calcBonusStrengthOne()}} Strength, +{{calcBonusAgilityOne()}} Agility, +{{calcBonusEnduranceOne()}} Endurance, +{{calcBonusIntelligenceOne()}} Intelligence<br><br>
+
+            Skills:<br>
+            <mat-list-item *ngFor="let skill of skillsOne">
+                {{skill.skill.name}}<br>
+                Level {{skill.level}} <button *ngIf="masteryPoints" mat-mini-button (click)="levelSkill(skill.char_skill_id, 'one')">+</button><br>
+                {{getSkillInfo(skill.skill.skill_id, "one")}}<br>
+                <br>
+              </mat-list-item>
+            </div>
+    </div>
+
+    <div *ngIf="secondMastery" class="mastery">
+          <div *ngIf="availableMasteries">
+          <mat-list-item *ngFor="let mastery of availableMasteries">
+              <a mat-button [routerLink]="">{{mastery.mastery_name}} </a>
+                <a mat-button (click)="selectMastery(mastery.mastery_id)">Select mastery</a>
+                <br>
+          </mat-list-item>
+          </div>
+
+          <div *ngIf="secondMasteryChosen">
+            {{masteryTwo.mastery_name}} <br>
+            Level {{masteryTwoLevel.mastery_level}} / 32 <button *ngIf="masteryPoints" mat-mini-button (click)="levelMasteryTwo()">+</button><br>
+            Current bonus: +{{calcBonusHPTwo()}} Health, +{{calcBonusStrengthTwo()}} Strength, +{{calcBonusAgilityTwo()}} Agility, +{{calcBonusEnduranceTwo()}} Endurance, +{{calcBonusIntelligenceTwo()}} Intelligence
+            <br><br>
+            Skills:<br>
+            <mat-list-item *ngFor="let skill of skillsTwo">
+                {{skill.skill.name}}<br>
+                Level {{skill.level}} <button *ngIf="masteryPoints" mat-mini-button (click)="levelSkill(skill.char_skill_id, 'two')">+</button><br>
+                {{getSkillInfo(skill.skill.skill_id, "two")}}<br>
+                <br>
+              </mat-list-item>
+          </div>
+    </div>
+
+    <div class="mastery_submit" *ngIf="masteryPointSpent">
+      <button mat-button (click)="submitMastery()">Submit</button>
+      </div>
+
+  </div>
+</mat-card>
