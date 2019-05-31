@@ -6,6 +6,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Hero;
+import java.util.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -21,4 +22,10 @@ public interface HeroRepository extends JpaRepository<Hero, Long> {
     
     @Query("select h from Hero h  where char_name = ?1")
     Hero getCharByName(String username);
+    
+    @Query("select h from Hero h where guild_id = ?1 order by level desc, experience desc")
+    Collection<Hero> getGuildHeroes(Long guild_id);
+    
+    @Query("select h from Hero h where char_name != ?1 order by level desc, experience desc")
+    Collection<Hero> getAllHeroes(String charName);
 }

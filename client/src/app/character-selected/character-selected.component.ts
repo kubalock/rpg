@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CharacterService } from '../shared/character/character.service';
 import { UserService } from '../shared/user/user.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-character-selected',
@@ -17,6 +18,8 @@ export class CharacterSelectedComponent implements OnInit {
   id: string;
   my_id: string;
   user_id: string;
+
+  myself = false;
 
   coldDamage = false;
   fireDamage = false;
@@ -33,7 +36,8 @@ export class CharacterSelectedComponent implements OnInit {
   constructor(private characterService: CharacterService,
               private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService) { }
+              private userService: UserService,
+              private appComponent: AppComponent) { }
 
   ngOnInit() {
     this.user_id = sessionStorage.getItem('user_id');
@@ -58,9 +62,13 @@ export class CharacterSelectedComponent implements OnInit {
         if(this.hero.min_bleed > 0) {
           this.bleedDamage = true;
         }
+        if(this.my_id == this.id) {
+          this.myself = true;
+        }
       });
     });
   });
+  this.appComponent.getResources();
   }
 
   fight() {

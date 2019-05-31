@@ -5,7 +5,7 @@
 Class: {{hero.char_class}} <br>
 Level: {{hero.level}} <br>
   </div> <br>
-<div class="fight_button">
+<div *ngIf="!myself" class="fight_button">
 <button (click)="fight()">Fight</button>
 </div>
 <div class="char_basics"><br>

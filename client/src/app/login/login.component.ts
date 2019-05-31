@@ -32,10 +32,12 @@ export class LoginComponent implements OnInit {
          console.log("User Not Found");
        } else {
         if (user.password == form.value.password) {
-          sessionStorage.setItem('user_id', user.user_id);
-          sessionStorage.setItem('char_id', user.hero.char_id);
           sessionStorage.setItem('username', user.username);
+          sessionStorage.setItem('user_id', user.user_id);
+          if(user.hero != null) {
+          sessionStorage.setItem('char_id', user.hero.char_id);
           sessionStorage.setItem('hero', user.hero.char_name);
+        }
           this.appComponent.gotoHome();
         } else {
           console.log("Wrong password");

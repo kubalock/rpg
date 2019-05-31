@@ -5,6 +5,7 @@ import { UserService } from '../shared/user/user.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemService } from '../shared/item/item.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-armory',
@@ -49,7 +50,8 @@ export class ArmoryComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private userService: UserService,
-              private itemService: ItemService) { }
+              private itemService: ItemService,
+              private appComponent: AppComponent) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user_id') == 'undefined') {
@@ -58,9 +60,9 @@ export class ArmoryComponent implements OnInit {
     if(sessionStorage.getItem('hero') != null) {
       this.characterService.getHeroName(sessionStorage.getItem('hero')).subscribe((result: any) => {
         this.hero = result;
-        console.log(this.hero);
         this.itemService.getUserItems(this.hero.char_id).subscribe((result: any) => {
           this.armory = result;
+          console.log(this.armory);
           for (let item of this.armory) {
             item.name = item.itemBase.name;
             if(item.prefix != null) {
@@ -119,12 +121,11 @@ export class ArmoryComponent implements OnInit {
                 this.leftHand = item;
               }
             }
-            console.log(this.headFree);
-            console.log(this.legsFree);
             console.log(this.equippedItems);
           });
         });
       });
+      this.appComponent.getResources();
     } else {
       this.router.navigate(['/character']);
     }
@@ -327,6 +328,9 @@ export class ArmoryComponent implements OnInit {
       if(this.item.itemBase.block_chance != null) {
         block_percent = block_percent + this.item.itemBase.block_chance;
       }
+      if(this.item.itemBase.block_damage != null) {
+        block_damage = block_damage + this.item.itemBase.block_damage;
+      }
       if(this.item.itemBase.def_ability != null) {
         def_ability = def_ability + this.item.itemBase.def_ability;
       }
@@ -334,13 +338,13 @@ export class ArmoryComponent implements OnInit {
         damage_bleed = damage_bleed + this.item.itemBase.damage_bleed;
       }
       if(this.item.itemBase.damage_cold != null) {
-        damage_cold = block_damage + this.item.itemBase.damage_cold;
+        damage_cold = damage_cold + this.item.itemBase.damage_cold;
       }
       if(this.item.itemBase.damage_electric != null) {
         damage_electric = damage_electric + this.item.itemBase.damage_electric;
       }
       if(this.item.itemBase.damage_fire != null) {
-        damage_fire = block_damage + this.item.itemBase.damage_fire;
+        damage_fire = damage_fire + this.item.itemBase.damage_fire;
       }
       if(this.item.itemBase.damage_poison != null) {
         damage_poison = damage_poison + this.item.itemBase.damage_poison;
@@ -625,9 +629,6 @@ export class ArmoryComponent implements OnInit {
     if(intelligence_percent != 0) {
       itemDescription.push(" Intelligence +" + intelligence_percent + "%");
     }
-    if(block_percent != 0) {
-      itemDescription.push(" Block +" + block_percent + "%");
-    }
     if(def_ability_percent != 0) {
       itemDescription.push(" Defensive ability +" + def_ability_percent + "%");
     }
@@ -667,7 +668,7 @@ export class ArmoryComponent implements OnInit {
     if(this.item.itemBase.req_intelligence) {
       itemDescription.push("Intelligence: " + this.item.itemBase.req_intelligence);
     }
-    if(this.item.itemBase.req_agility) {
+    if(this.item.itemBase.req_dexterity) {
       itemDescription.push("Agility: " + this.item.itemBase.req_dexterity);
     }
     if(this.item.prefix != null && this.item.suffix != null) {
@@ -774,7 +775,7 @@ export class ArmoryComponent implements OnInit {
     }
   }
 
-  takeOff(item: string) {
+  takeOff(item: any) {
 
 
     if(item.itemBase.type == "Head") {

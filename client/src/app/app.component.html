@@ -10,13 +10,16 @@
   </ul>
 </div>
 <div *ngIf="isLoggedIn" class="loggedOptions">
+  Gold: {{gold}} Wood: {{wood}} Iron: {{iron}}
+
   <ul class="nav nav-pills">
     <li><a routerLinkActive="active" routerLink="/dashboard">Dashboard</a></li>
     <li><a routerLinkActive="active" routerLink="/character">Character</a></li>
+    <li><a routerLinkActive="active" routerLink="/guild">Guild</a></li>
     <li><a routerLinkActive="active" routerLink="/mastery">Mastery</a></li>
     <li><a routerLinkActive="active" routerLink="/armory">Armory</a></li>
     <li><a routerLinkActive="active" routerLink="/search">Search Opponents</a></li>
-    <li><a routerLinkActive="active" routerLink="/explore">Explorations</a><li>
+    <li><a routerLinkActive="active" routerLink="/explore">Explorations</a></li>
     </ul>
   </div>
 <div class="container">

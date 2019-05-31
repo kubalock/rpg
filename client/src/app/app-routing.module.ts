@@ -11,12 +11,27 @@ import { CharacterSearchComponent } from './character-search/character-search.co
 import { ArmoryComponent } from './armory/armory.component';
 import { ExploreComponent } from './explore/explore.component';
 import { ExploreResultComponent } from './explore-result/explore-result.component';
+import { GuildComponent } from './guild/guild.component';
+import { GuildInfoComponent } from './guild-info/guild-info.component';
+import { GuildListComponent } from './guild-list/guild-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
     path: 'index',
     component: IndexComponent
+  },
+  {
+    path: 'guild/:no',
+    component: GuildInfoComponent
+  },
+  {
+    path: 'guild-list',
+    component: GuildListComponent
+  },
+  {
+    path: 'guild',
+    component: GuildComponent
   },
   {
     path: 'explore/:no',

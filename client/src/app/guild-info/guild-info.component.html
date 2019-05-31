@@ -1,3 +1,59 @@
-<p>
-  guild-info works!
-</p>
+<mat-card>
+  <a routerLinkActive="active" routerLink="/guild-list">Back</a>
+  <br>
+    {{guild.name}}<br>
+    {{guild.descritpion}}<br>
+    Number of members: {{guildSize}} / {{guild.capacity}}<br>
+    Min. level: {{guild.min_level}}<br>
+    <br>
+    Members: <br>
+    <ul style="list-style: none;">
+    <li *ngFor="let hero of heroes">
+      <a mat-button [routerLink]="['/character', hero.char_id]">{{hero.char_name}}</a>
+    </li>
+    </ul>
+
+    <div *ngIf="!haveGuild">
+      <mat-card-actions>
+          <button mat-button (click)="joinGuild()">Join Guild</button><br>
+      </mat-card-actions>
+    </div>
+
+    <div *ngIf="haveGuild">
+      <mat-card-actions>
+          <button mat-button (click)="attackGuild()">Attack Guild</button><br>
+      </mat-card-actions>
+    </div>
+    <br>
+    <ul style="list-style: none;">
+      <li *ngFor="let hero of ourInfo">
+        <div class="tooltip">{{hero[0]}}<br>
+          <span class="tooltiptext">
+            <ul style="list-style: none;">
+              <li *ngFor="let info of hero">
+                {{info}}
+                </li>
+                </ul></span>
+        </div>
+        </li>
+        </ul>
+
+        <ul style="list-style: none;">
+          <li *ngFor="let hero of yourInfo">
+            <div class="tooltip">{{hero[0]}}<br>
+              <span class="tooltiptext">
+                <ul style="list-style: none;">
+                  <li *ngFor="let info of hero">
+                    {{info}}
+                    </li>
+                    </ul></span>
+            </div>
+            </li>
+            </ul>
+
+            <ul style="list-style: none;">
+            <li *ngFor="let round of warResult">
+              {{round}}
+            </li>
+            </ul>
+</mat-card>

@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CharacterService } from '../shared/character/character.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-character-search',
@@ -19,15 +20,16 @@ export class CharacterSearchComponent implements OnInit {
   heroes: Array<any>;
 
   constructor(private characterService: CharacterService,
-              private router: Router) { }
+              private router: Router,
+              private appComponent: AppComponent) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('hero') != null) {
     this.hero = sessionStorage.getItem('hero');
     this.characterService.getAllHeroes(this.hero).subscribe((heroes: any) => {
       this.heroes = heroes;
-      console.log(this.heroes);
     });
+    this.appComponent.getResources();
   } else {
     this.router.navigate(['/character']);
   }

@@ -5,13 +5,11 @@
  */
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.micrometer.core.lang.NonNull;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,11 +25,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "guilds")
 public class Guild {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long guild_id;
+
+    private @NonNull
+    String name;
+    private @NonNull
+    String descritpion;
+    private @NonNull
+    Long leader_id;
+    private @NonNull
+    Integer capacity;
+    private @NonNull
+    Integer min_level;
+
     
-    private String name;
-    private String descritpion;
+    public Guild(String name, String descritpion, Long leader_id) {
+        this.name = name;
+        this.descritpion = descritpion;
+        this.leader_id = leader_id;
+        this.capacity = 20;
+        this.min_level = 1;
+    }
 }

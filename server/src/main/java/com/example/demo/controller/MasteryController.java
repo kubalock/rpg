@@ -9,7 +9,6 @@ import com.example.demo.model.CharMastery;
 import com.example.demo.model.Mastery;
 import com.example.demo.repository.CharMasteryRepository;
 import com.example.demo.repository.MasteryRepository;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

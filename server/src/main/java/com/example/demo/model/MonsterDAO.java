@@ -7,8 +7,6 @@ package com.example.demo.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 /**
  *

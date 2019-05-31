@@ -1,3 +1,51 @@
-<p>
-  guild works!
-</p>
+<mat-card>
+  <a routerLinkActive="active" routerLink="/guild-list">Guild List</a>
+  <br>
+  <div *ngIf="!haveGuild">
+    You do not have a guild yet. Create one or join to one.<br>
+    <mat-card-content>
+      <form #createForm="ngForm" (ngSubmit)="createGuild(createForm)">
+      <mat-form-field>
+        <input matInput ngModel required name="name" placeholder="Guild name"
+        #name="ngModel">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+      <input matInput ngModel required name="description" placeholder="Guild Description"
+      #description="ngModel">
+      </mat-form-field>
+      <br>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </mat-card-actions>
+    </form>
+    </mat-card-content>
+  </div>
+
+
+  <div *ngIf="haveGuild">
+    {{guild.name}}<br>
+    {{guild.descritpion}}<br>
+    Number of members: {{guildSize}} / {{guild.capacity}}<br>
+    Min. level: {{guild.min_level}} <br>
+    <br>
+    Members: <br>
+    <ul style="list-style: none;">
+    <li *ngFor="let hero of heroes">
+      <a mat-button [routerLink]="['/character', hero.char_id]">{{hero.char_name}}</a>
+    </li>
+    </ul>
+
+    <br>
+    <div *ngIf="guildLeader">
+      <mat-card-actions>
+          <button mat-button (click)="deleteGuild()">Delete Guild</button><br>
+      </mat-card-actions>
+    </div>
+    <div *ngIf="!guildLeader">
+      <mat-card-actions>
+          <button mat-button (click)="leaveGuild()">Leave Guild</button><br>
+      </mat-card-actions>
+    </div>
+  </div>
+</mat-card>

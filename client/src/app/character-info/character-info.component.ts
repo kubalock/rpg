@@ -5,6 +5,7 @@ import { UserService } from '../shared/user/user.service';
 import { MasteryService } from '../shared/mastery/mastery.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-character-info',
@@ -31,7 +32,8 @@ export class CharacterInfoComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private userService: UserService,
-              private masteryService: MasteryService) { }
+              private masteryService: MasteryService,
+              private appComponent: AppComponent) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user_id') == 'undefined') {
@@ -40,18 +42,15 @@ export class CharacterInfoComponent implements OnInit {
     if(sessionStorage.getItem('hero') != null) {
       this.haveCharacter = true;
       this.characterService.getHeroName(sessionStorage.getItem('hero')).subscribe((hero: any) => {
-        this.hero = hero;
-        console.log(this.hero);
+      this.hero = hero;
 
-        if(this.hero.points > 0) {
+      if(this.hero.points > 0) {
           this.charPoints = true;
         }
-
-        if(this.hero.experience >= this.hero.next_level) {
+      if(this.hero.experience >= this.hero.next_level) {
           this.enoughExp = true;
         }
-
-        if(this.hero.min_cold > 0) {
+      if(this.hero.min_cold > 0) {
       this.coldDamage = true;
     }
       if(this.hero.min_fire > 0) {
@@ -67,6 +66,7 @@ export class CharacterInfoComponent implements OnInit {
       this.bleedDamage = true;
     }
     });
+    this.appComponent.getResources();
   }
 }
 
@@ -182,16 +182,20 @@ export class CharacterInfoComponent implements OnInit {
   }
 
   calcHP() {
+    let hp = 0;
     if(this.hero.hp_percent > 0) {
-      return (this.hero.health + ((this.hero.hp_percent/100) * this.hero.health)).toFixed();
+      hp = this.hero.health + (this.hero.hp_percent/100) * this.hero.health;
+      return Math.round(hp);
     } else {
       return this.hero.health;
     }
   }
 
   calcAgility() {
+    let agility = 0;
       if(this.hero.agility_percent > 0) {
-        return (this.hero.agility + ((this.hero.agility_percent/100) * this.hero.agility)).toFixed();
+        agility = this.hero.agility + (this.hero.agility_percent/100) * this.hero.agility;
+        return Math.round(agility);
       } else {
         return this.hero.agility;
       }
@@ -221,7 +225,7 @@ export class CharacterInfoComponent implements OnInit {
       }
     }
 
-    calcMinCold() {
+  calcMinCold() {
         if(this.hero.cold_percent > 0) {
           return (this.hero.min_cold + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
         } else {
@@ -229,7 +233,7 @@ export class CharacterInfoComponent implements OnInit {
         }
       }
 
-    calcMaxCold() {
+  calcMaxCold() {
         if(this.hero.cold_percent > 0) {
           return (this.hero.max_cold + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
         } else {
@@ -237,7 +241,7 @@ export class CharacterInfoComponent implements OnInit {
         }
       }
 
-      calcMinElectric() {
+  calcMinElectric() {
           if(this.hero.electric_percent > 0) {
             return (this.hero.min_electric + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
           } else {
@@ -245,7 +249,7 @@ export class CharacterInfoComponent implements OnInit {
           }
         }
 
-      calcMaxElectric() {
+  calcMaxElectric() {
           if(this.hero.electric_percent > 0) {
             return (this.hero.max_electric + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
           } else {
@@ -253,7 +257,7 @@ export class CharacterInfoComponent implements OnInit {
           }
         }
 
-        calcMinBleed() {
+  calcMinBleed() {
             if(this.hero.bleed_percent > 0) {
               return (this.hero.min_bleed + ((this.hero.bleed_percent/100) * this.hero.min_bleed)).toFixed();
             } else {
@@ -261,7 +265,7 @@ export class CharacterInfoComponent implements OnInit {
             }
           }
 
-        calcMaxBleed() {
+  calcMaxBleed() {
             if(this.hero.bleed_percent > 0) {
               return (this.hero.max_bleed + ((this.hero.bleed_percent/100) * this.hero.max_bleed)).toFixed();
             } else {
@@ -269,7 +273,7 @@ export class CharacterInfoComponent implements OnInit {
             }
           }
 
-          calcMinPoison() {
+  calcMinPoison() {
               if(this.hero.poison_percent > 0) {
                 return (this.hero.min_poison + ((this.hero.fire_percent/100) * this.hero.min_poison)).toFixed();
               } else {
@@ -277,7 +281,7 @@ export class CharacterInfoComponent implements OnInit {
               }
             }
 
-          calcMaxPoison() {
+  calcMaxPoison() {
               if(this.hero.fire_percent > 0) {
                 return (this.hero.max_poison + ((this.hero.fire_percent/100) * this.hero.max_poison)).toFixed();
               } else {
@@ -294,16 +298,20 @@ export class CharacterInfoComponent implements OnInit {
     }
 
   calcOffAbility() {
+    let off = 0;
     if(this.hero.off_ability_percent > 0) {
-        return (this.hero.off_ability + this.calcAgility()) + ((this.hero.off_ability_percent/100) * this.hero.off_ability);
+        off = this.calcAgility() + (this.hero.off_ability_percent/100 * this.hero.off_ability) + this.hero.off_ability;
+        return Math.round(off);
     } else {
     return this.hero.off_ability + this.calcAgility();
   }
     }
 
   calcDefAbility() {
+    let def = 0;
       if(this.hero.def_ability_percent > 0) {
-          return (this.hero.def_ability + this.calcAgility()) + ((this.hero.def_ability_percent/100) * this.hero.def_ability);
+          def = this.calcAgility() + (this.hero.def_ability_percent/100 * this.hero.def_ability) + this.hero.def_ability;
+          return Math.round(def);
       } else {
       return this.hero.def_ability + this.calcAgility();
     }

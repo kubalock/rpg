@@ -11,7 +11,6 @@ import com.example.demo.repository.HeroRepository;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.PrefixRepository;
 import com.example.demo.repository.SuffixRepository;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;

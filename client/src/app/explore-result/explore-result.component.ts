@@ -5,6 +5,7 @@ import { UserService } from '../shared/user/user.service';
 import { ExplorationService } from '../shared/exploration/exploration.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-explore-result',
@@ -33,7 +34,8 @@ export class ExploreResultComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private explorationService: ExplorationService) { }
+              private explorationService: ExplorationService,
+              private appComponent: AppComponent) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user_id') == 'undefined') {
@@ -56,6 +58,7 @@ export class ExploreResultComponent implements OnInit {
         this.fightResult = this.fightResult.splice(this.last);
       });
     });
+    this.appComponent.getResources();
   }
 
 }

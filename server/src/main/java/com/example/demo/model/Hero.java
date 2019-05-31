@@ -5,7 +5,7 @@
  */
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.micrometer.core.lang.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +37,7 @@ public class Hero {
     
     @OneToOne
     @JoinColumn(name = "guild_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Guild guild;
     
     private @NonNull
@@ -152,6 +152,7 @@ public class Hero {
     public Hero(String name) {
         this.char_name = name;
         this.char_class = "None";
+        this.guild = null;
         this.level = 1;
         this.experience = 0;
         this.next_level = 100;

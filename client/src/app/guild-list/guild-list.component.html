@@ -1,3 +1,5 @@
-<p>
-  guild-list works!
-</p>
+<ul style="list-style: none;">
+<li *ngFor="let guild of guilds">
+  <a mat-button [routerLink]="['/guild', guild.guild_id]">{{guild.name}}</a>
+</li>
+</ul>

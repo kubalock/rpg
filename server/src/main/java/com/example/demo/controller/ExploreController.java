@@ -167,7 +167,7 @@ public class ExploreController {
             }
 
             if (me.getHealth() > 0) {
-                int healthRegenerated = (me.getEndurance() / 2) + me.getHealth_regen();
+                int healthRegenerated = me.getHealth_regen();
                 report.add(me.getChar_name() + " regenerates " + healthRegenerated + " health points");
                 int myHealth = me.getHealth() + healthRegenerated;
                 me.setHealth(myHealth);

@@ -6,6 +6,7 @@ import { MasteryService } from '../shared/mastery/mastery.service';
 import { SkillService } from '../shared/skill/skill.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-mastery',
@@ -49,7 +50,8 @@ export class MasteryComponent implements OnInit {
               private route: ActivatedRoute,
               private userService: UserService,
               private masteryService: MasteryService,
-              private skillService: SkillService) { }
+              private skillService: SkillService,
+              private appComponent: AppComponent) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user_id') == 'undefined') {
@@ -58,6 +60,9 @@ export class MasteryComponent implements OnInit {
     if(sessionStorage.getItem('hero') != null) {
       this.characterService.getHeroName(sessionStorage.getItem('hero')).subscribe((result: any) => {
         this.hero = result;
+        if(this.hero.mastery_points > 0) {
+          this.masteryPoints = true;
+        }
         if(this.hero.level > 1) {
           this.firstMastery = true;
           this.masteryService.getMasteries(this.hero.char_id).subscribe((masteries: any) => {
@@ -72,61 +77,46 @@ export class MasteryComponent implements OnInit {
                   if(skill.skill.mastery.mastery_id == this.masteryOne.mastery_id) {
                     this.skillsOne.push(skill);
                   }
-                }
+                } });
+              } else {
+              this.masteryService.getListOfMasteries().subscribe((result: any) => {
+                this.allMasteries = result;
+              });
+            } });
+          }
             if(this.hero.level > 7) {
               this.secondMastery = true;
               if(this.masteries[1] != null) {
                 this.masteryTwoLevel = this.masteries[1];
                 this.masteryTwo = this.masteries[1].mastery;
                 this.secondMasteryChosen = true;
-                  for (var skill of this.skills) {
-                    if(skill.skill.mastery.mastery_id == this.masteryTwo.mastery_id) {
-                      this.skillsTwo.push(skill);
-                    }
-                  }
-              } else {
-                this.masteryService.getAvailableMasteries(this.hero.char_id).subscribe((result: any) => {
-                  this.availableMasteries = result;
-                });
+            for (var skill of this.skills) {
+              if(skill.skill.mastery.mastery_id == this.masteryTwo.mastery_id) {
+                this.skillsTwo.push(skill);
               }
             }
-          else {
-              this.masteryService.getListOfMasteries().subscribe((result: any) => {
-                this.allMasteries = result;
-              });
-            }
-            });
-          }
+          } else {
+          this.masteryService.getAvailableMasteries(this.hero.char_id).subscribe((result: any) => {
+            this.availableMasteries = result;
           });
-          if(this.hero.mastery_points > 0) {
-            this.masteryPoints = true;
-          }
         }
-      });
-    } else {
+          }
+        });
+              this.appComponent.getResources();
+  }
+    else {
       this.router.navigate(['/character']);
     }
-  }
+}
+
 
   levelMasteryOne() {
     this.masteryOneLevel.mastery_level = this.masteryOneLevel.mastery_level +1;
     this.hero.strength = this.hero.strength + this.masteryOne.strength_level;
-    if(this.masteryOne.strength_level > 0) {
-      this.hero.min_damage = this.hero.min_damage + this.masteryOne.strength_level;
-      this.hero.max_damage = this.hero.max_damage + this.masteryOne.strength_level;
-    }
     this.hero.agility = this.hero.agility + this.masteryOne.agility_level;
-    if(this.masteryOne.agility_level > 0) {
-      this.hero.off_ability = this.hero.off_ability + this.masteryOne.agility_level;
-      this.hero.def_ability = this.hero.def_ability + this.masteryOne.agility_level;
-    }
     this.hero.intelligence = this.hero.intelligence + this.masteryOne.intelligence_level;
     this.hero.health = this.hero.health + this.masteryOne.health_level;
     this.hero.endurance = this.hero.endurance + this.masteryOne.endurance_level;
-    if(this.masteryOne.endurance_level > 0) {
-      this.hero.defense = this.hero.defense + 1;
-      this.hero.health_regen = this.hero.health_regen + 1;
-    }
     this.hero.mastery_points = this.hero.mastery_points - 1;
     if(this.hero.mastery_points < 1) {
       this.masteryPoints = false;
@@ -138,22 +128,10 @@ export class MasteryComponent implements OnInit {
   levelMasteryTwo() {
     this.masteryTwoLevel.mastery_level = this.masteryTwoLevel.mastery_level +1;
     this.hero.strength = this.hero.strength + this.masteryTwo.strength_level;
-    if(this.masteryTwo.strength_level > 0) {
-      this.hero.min_damage = this.hero.min_damage + this.masteryTwo.strength_level;
-      this.hero.max_damage = this.hero.max_damage + this.masteryTwo.strength_level;
-    }
     this.hero.agility = this.hero.agility + this.masteryTwo.agility_level;
-    if(this.masteryTwo.agility_level > 0) {
-      this.hero.off_ability = this.hero.off_ability + this.masteryTwo.agility_level;
-      this.hero.def_ability = this.hero.def_ability + this.masteryTwo.agility_level;
-    }
     this.hero.intelligence = this.hero.intelligence + this.masteryTwo.intelligence_level;
     this.hero.health = this.hero.health + this.masteryTwo.health_level;
     this.hero.endurance = this.hero.endurance + this.masteryTwo.endurance_level;
-    if(this.masteryOne.endurance_level > 0) {
-      this.hero.defense = this.hero.defense + 1;
-      this.hero.health_regen = this.hero.health_regen + 1;
-    }
     this.hero.mastery_points = this.hero.mastery_points - 1;
     if(this.hero.mastery_points < 1) {
       this.masteryPoints = false;

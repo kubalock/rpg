@@ -5,6 +5,7 @@
  */
 package com.example.demo.controller;
 
+import com.example.demo.model.Guild;
 import com.example.demo.model.Hero;
 import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class HeroController {
 
     @Autowired
     private HeroRepository heroRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -35,27 +36,21 @@ public class HeroController {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
     }
-   
+
     @GetMapping("/getAllHeroes/{hero}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Collection<Hero> getAllHeroes(@PathVariable(value="hero") String heroName) {
-        Collection<Hero> heroes = heroRepository.findAll();
-        for(Hero hero : heroes) {
-            if(hero.getChar_name().equals(heroName)) {
-                heroes.remove(hero);
-                break;
-            }
-        }
-        return heroes;
+    public Collection<Hero> getAllHeroes(@PathVariable(value = "hero") String heroName) {
+        return heroRepository.getAllHeroes(heroName);
     }
 
     @GetMapping("/hero/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
     public Hero getCharByName(@PathVariable(value = "id") String charname) {
         Hero hero = heroRepository.getCharByName(charname);
+        System.out.println(hero);
         return hero;
     }
-    
+
     @PostMapping("/newHero/{name}")
     @CrossOrigin(origins = "http://localhost:4200")
     public void createNewHero(@PathVariable(value = "name") String name) {
@@ -63,14 +58,27 @@ public class HeroController {
         System.out.println(hero);
         heroRepository.save(hero);
     }
-    
+
     @PutMapping("/assignHero/{id}/{hero}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public void assignHero(@PathVariable(value="id") Long user_id,
-            @PathVariable(value="hero") String heroName) {
+    public void assignHero(@PathVariable(value = "id") Long user_id,
+            @PathVariable(value = "hero") String heroName) {
         User user = userRepository.getOne(user_id);
         Hero hero = heroRepository.getCharByName(heroName);
         user.setHero(hero);
         userRepository.save(user);
     }
+
+    @GetMapping("/getHeroGuild/{heroName}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Guild getHeroGuild(@PathVariable(value = "heroName") String heroName) {
+        return heroRepository.getCharByName(heroName).getGuild();
+    }
+
+    @GetMapping("/getGuildHeroes/{id}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public Collection<Hero> getGuildHeroes(@PathVariable(value = "id") Long id) {
+        return heroRepository.getGuildHeroes(id);
+    }
+
 }

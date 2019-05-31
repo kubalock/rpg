@@ -5,9 +5,7 @@
  */
 package com.example.demo.controller;
 
-import com.example.demo.repository.HeroRepository;
 import com.example.demo.repository.MonsterRepository;
-import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

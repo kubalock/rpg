@@ -34,4 +34,16 @@ export class CharacterService {
   fightHero(my_id: String, it_id: String) {
     return this.http.get(this.API + '/fight/' + my_id + '/' + it_id);
   }
+
+  getHeroGuild(heroname: String) {
+    return this.http.get(this.API + '/getHeroGuild/' + heroname);
+  }
+
+  getGuildHeroes(id: String) {
+    return this.http.get(this.API + '/getGuildHeroes/' + id);
+  }
+
+  getCharacterResources(id: String) {
+    return this.http.get(this.API + '/getCharResources/' + id);
+  }
 }

@@ -5,7 +5,6 @@
  */
 package com.example.demo.repository;
 
-import com.example.demo.model.Prefix;
 import com.example.demo.model.Suffix;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
