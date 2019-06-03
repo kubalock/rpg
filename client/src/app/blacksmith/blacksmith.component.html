@@ -1,0 +1,37 @@
+<mat-card>
+<div class="blacksmith">
+
+  Stones storage: <br>
+  Blood stones: {{stones.blood_stone}}
+  Heart stones: {{stones.heart_stone}}
+  Life stones: {{stones.life_stone}}
+  Sould stones: {{stones.soul_stone}}
+  <div class="storage">
+    <br>
+    Armory:
+    <ul style="list-style: none;">
+    <li *ngFor="let item of armory; let i = index">
+      <div class="tooltip">{{item.name}}  <br>
+        <span class="tooltiptext">
+              <ul style="list-style: none;">
+                <li *ngFor="let line of showItemDetails(item, 'armory', item.level)">
+                  {{line}}
+                  </li>
+              </ul>
+            </span>
+      </div>
+      <button mat-mini-button (click)="select(item)">Select</button>
+    </li>
+    <div *ngIf="nextLevel">
+      Next level:
+      <ul style="list-style: none;">
+        <li *ngFor="let line of nextLevel">
+          {{line}}
+          </li>
+          <button mat-mini-button (click)="upgradeButton()">Upgrade</button>
+        </ul>
+      </div>
+    </ul>
+  </div>
+</div>
+</mat-card>

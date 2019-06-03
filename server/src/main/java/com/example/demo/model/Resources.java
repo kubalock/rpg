@@ -24,7 +24,6 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "resources")
 public class Resources {
@@ -44,4 +43,10 @@ public class Resources {
     @JoinColumn(name = "char_id")
     @JsonBackReference
     private Hero hero;
+    
+    public Resources() {
+        this.gold = 100;
+        this.wood = 100;
+        this.iron = 100;
+    }
 }

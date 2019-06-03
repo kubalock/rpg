@@ -34,7 +34,6 @@ export class GuildComponent implements OnInit {
         if(guild != null) {
           this.guild = guild;
           this.haveGuild = true;
-          console.log(this.guild);
           if(this.guild.leader_id == sessionStorage.getItem('char_id')) {
             this.guildLeader = true;
           }

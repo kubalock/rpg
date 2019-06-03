@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('hero', user.hero.char_name);
         }
           this.appComponent.gotoHome();
+          this.appComponent.getResources();
         } else {
           console.log("Wrong password");
         }

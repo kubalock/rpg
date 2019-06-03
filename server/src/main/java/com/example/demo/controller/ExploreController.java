@@ -13,11 +13,13 @@ import com.example.demo.model.ItemBase;
 import com.example.demo.model.Prefix;
 import com.example.demo.model.Suffix;
 import com.example.demo.model.MonsterDAO;
+import com.example.demo.model.Stones;
 import com.example.demo.repository.HeroRepository;
 import com.example.demo.repository.ItemBaseRepository;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.MonsterRepository;
 import com.example.demo.repository.PrefixRepository;
+import com.example.demo.repository.StonesRepository;
 import com.example.demo.repository.SuffixRepository;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,13 +59,20 @@ public class ExploreController {
     @Autowired
     private ItemBaseRepository uniqueItemRepository;
 
-    public ExploreController(HeroRepository hero, MonsterRepository monster, ItemRepository item, PrefixRepository prefix, SuffixRepository suffix, ItemBaseRepository unique) {
+    @Autowired
+    private StonesRepository stonesRepository;
+
+    public ExploreController(HeroRepository hero,
+            MonsterRepository monster, ItemRepository item,
+            PrefixRepository prefix, SuffixRepository suffix,
+            ItemBaseRepository unique, StonesRepository stones) {
         this.heroRepository = hero;
         this.monsterRepository = monster;
         this.itemRepository = item;
         this.prefixRepository = prefix;
         this.suffixRepository = suffix;
         this.uniqueItemRepository = unique;
+        this.stonesRepository = stones;
     }
 
     @GetMapping("/explore/{level}/{my_id}")
@@ -99,70 +108,69 @@ public class ExploreController {
 
         do {
             report.add("Round " + round);
-            if(me.getStunned() == 0) {
-            random = rand.nextInt(monsters.size()) + 0;
-            report.add(this.heroRound(me, monsters.get(random)));
-            if (this.checkMonster(monsters.get(random))) {
-                monsters.remove(random);
-                if (monsters.size() == 0) {
-                    break;
-                }
+            if (me.getStunned() == 0) {
                 random = rand.nextInt(monsters.size()) + 0;
-            }
-            chance = rand.nextInt(100) + 0;
-            if (me.getAttack_speed() > 100) {
-                if (chance < me.getAttack_speed() - 100) {
-                    report.add(this.heroRound(me, monsters.get(random)));
-                    if (this.checkMonster(monsters.get(random))) {
-                        monsters.remove(random);
-                        if (monsters.size() == 0) {
-                            break;
-                        }
-                        random = rand.nextInt(monsters.size()) + 0;
+                report.add(this.heroRound(me, monsters.get(random)));
+                if (this.checkMonster(monsters.get(random))) {
+                    monsters.remove(random);
+                    if (monsters.size() == 0) {
+                        break;
                     }
+                    random = rand.nextInt(monsters.size()) + 0;
                 }
-                if (chance < me.getAttack_speed() - 200) {
-                    report.add(this.heroRound(me, monsters.get(random)));
-                    if (this.checkMonster(monsters.get(random))) {
-                        monsters.remove(random);
-                        if (monsters.size() == 0) {
-                            break;
+                chance = rand.nextInt(100) + 0;
+                if (me.getAttack_speed() > 100) {
+                    if (chance < me.getAttack_speed() - 100) {
+                        report.add(this.heroRound(me, monsters.get(random)));
+                        if (this.checkMonster(monsters.get(random))) {
+                            monsters.remove(random);
+                            if (monsters.size() == 0) {
+                                break;
+                            }
+                            random = rand.nextInt(monsters.size()) + 0;
                         }
-                        random = rand.nextInt(monsters.size()) + 0;
                     }
+                    if (chance < me.getAttack_speed() - 200) {
+                        report.add(this.heroRound(me, monsters.get(random)));
+                        if (this.checkMonster(monsters.get(random))) {
+                            monsters.remove(random);
+                            if (monsters.size() == 0) {
+                                break;
+                            }
+                            random = rand.nextInt(monsters.size()) + 0;
+                        }
+                    }
+
                 }
-                
-            }
             } else {
                 report.add(me.getChar_name() + " is stunned and cannot attack.");
                 me.setStunned(me.getStunned() - 1);
             }
-            
-            
+
             for (MonsterDAO monster : monsters) {
                 chance = rand.nextInt(100);
-                if(monster.getStunned() == 0) {
-                report.add(this.monsterRound(monster, me));
-                if (me.getHealth() == 0) {
-                    break;
-                }
-                if (monster.getAttack_speed() > 100) {
-                    if (chance < monster.getAttack_speed() - 100) {
-                        report.add(this.monsterRound(monster, me));
-                        if (me.getHealth() == 0) {
-                            break;
+                if (monster.getStunned() == 0) {
+                    report.add(this.monsterRound(monster, me));
+                    if (me.getHealth() == 0) {
+                        break;
+                    }
+                    if (monster.getAttack_speed() > 100) {
+                        if (chance < monster.getAttack_speed() - 100) {
+                            report.add(this.monsterRound(monster, me));
+                            if (me.getHealth() == 0) {
+                                break;
+                            }
+                        }
+                        if (chance < monster.getAttack_speed() - 200) {
+                            report.add(this.monsterRound(monster, me));
+                            if (me.getHealth() == 0) {
+                                break;
+                            }
                         }
                     }
-                    if (chance < monster.getAttack_speed() - 200) {
-                        report.add(this.monsterRound(monster, me));
-                        if (me.getHealth() == 0) {
-                            break;
-                        }
-                    }
-                }
                 } else {
-                 report.add(monster.getMonster_name() + " is stunned and cannot attack.");
-                 monster.setStunned(monster.getStunned() - 1);
+                    report.add(monster.getMonster_name() + " is stunned and cannot attack.");
+                    monster.setStunned(monster.getStunned() - 1);
                 }
             }
 
@@ -192,12 +200,80 @@ public class ExploreController {
                     report.add(this.createItem(level, originalMe));
                 }
                 i++;
+                if (this.bloodStoneChance(level)) {
+                    Stones stones = stonesRepository.getCharStones(originalMe.getChar_id());
+                    stones.setBlood_stone(stones.getBlood_stone() + 1);
+                    stonesRepository.save(stones);
+                    report.add("A blood stone has been found");
+                }
+                if (this.heartStoneChance(level)) {
+                    Stones stones = stonesRepository.getCharStones(originalMe.getChar_id());
+                    stones.setHeart_stone(stones.getHeart_stone() + 1);
+                    stonesRepository.save(stones);
+                    report.add("A heart stone has been found");
+                }
+                if (this.lifeStoneChance(level)) {
+                    Stones stones = stonesRepository.getCharStones(originalMe.getChar_id());
+                    stones.setLife_stone(stones.getLife_stone() + 1);
+                    stonesRepository.save(stones);
+                    report.add("A life stone has been found");
+                }
+                if (this.soulStoneChance(level)) {
+                    Stones stones = stonesRepository.getCharStones(originalMe.getChar_id());
+                    stones.setSoul_stone(stones.getSoul_stone() + 1);
+                    stonesRepository.save(stones);
+                    report.add("A soul stone has been found");
+                }
             }
         } else {
             report.add(me.getChar_name() + " was defeated.");
         }
         heroRepository.save(originalMe);
         return report;
+    }
+
+    public boolean bloodStoneChance(Long level) {
+        Random rand = new Random();
+
+        int random = rand.nextInt(100);
+        if (random < level * 4) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean heartStoneChance(Long level) {
+        Random rand = new Random();
+
+        int random = rand.nextInt(100);
+        if (random < level * 3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean lifeStoneChance(Long level) {
+        Random rand = new Random();
+
+        int random = rand.nextInt(100);
+        if (random < level * 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean soulStoneChance(Long level) {
+        Random rand = new Random();
+
+        int random = rand.nextInt(100);
+        if (random < level) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String createItem(Long level, Hero hero) {
@@ -227,6 +303,7 @@ public class ExploreController {
         }
         item.setHero(hero);
         item.setEquipped("no");
+        item.setLevel(0);
         itemRepository.save(item);
         String output = "";
         if (item.getPrefix() != null) {
@@ -282,7 +359,7 @@ public class ExploreController {
                 output = me.getChar_name() + " uses (weapon) and deals " + damageDealt.toArray()[0] + " damage to " + monster.getMonster_name() + "(" + monster.getHealth() + " health remaining)";
             }
             if (slowed == "no" && me.getSlow() > 0) {
-                output = output + me.getChar_name() + " slows " + monster.getMonster_name() + " by " + me.getSlow()+ "%.";
+                output = output + me.getChar_name() + " slows " + monster.getMonster_name() + " by " + me.getSlow() + "%.";
             }
         } else {
             output = me.getChar_name() + " uses (weapon) to hit " + monster.getMonster_name() + " but it was a miss";

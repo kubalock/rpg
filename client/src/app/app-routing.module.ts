@@ -14,12 +14,17 @@ import { ExploreResultComponent } from './explore-result/explore-result.componen
 import { GuildComponent } from './guild/guild.component';
 import { GuildInfoComponent } from './guild-info/guild-info.component';
 import { GuildListComponent } from './guild-list/guild-list.component';
+import { BlacksmithComponent } from './blacksmith/blacksmith.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
     path: 'index',
     component: IndexComponent
+  },
+  {
+    path: 'blacksmith',
+    component: BlacksmithComponent
   },
   {
     path: 'guild/:no',

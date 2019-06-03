@@ -7,10 +7,14 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Guild;
 import com.example.demo.model.Hero;
+import com.example.demo.model.Resources;
+import com.example.demo.model.Stones;
 import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.repository.HeroRepository;
+import com.example.demo.repository.ResourcesRepository;
+import com.example.demo.repository.StonesRepository;
 import com.example.demo.repository.UserRepository;
 import java.util.Collection;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,10 +35,19 @@ public class HeroController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ResourcesRepository resourcesRepository;
+    
+    @Autowired
+    private StonesRepository stonesRepository;
 
-    public HeroController(HeroRepository heroRepository, UserRepository userRepository) {
+    public HeroController(HeroRepository heroRepository, UserRepository userRepository,
+            ResourcesRepository resourcesRepository, StonesRepository stonesRepository) {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
+        this.resourcesRepository = resourcesRepository;
+        this.stonesRepository = stonesRepository;
     }
 
     @GetMapping("/getAllHeroes/{hero}")
@@ -55,7 +68,12 @@ public class HeroController {
     @CrossOrigin(origins = "http://localhost:4200")
     public void createNewHero(@PathVariable(value = "name") String name) {
         Hero hero = new Hero(name);
-        System.out.println(hero);
+        Resources resources = new Resources();
+        resources.setHero(hero);
+        Stones stones = new Stones();
+        stones.setHero(hero);
+        stonesRepository.save(stones);
+        resourcesRepository.save(resources);
         heroRepository.save(hero);
     }
 

@@ -122,7 +122,7 @@ export class MasteryComponent implements OnInit {
       this.masteryPoints = false;
     }
     this.masteryPointSpent = true;
-    console.log(this.masteryOneLevel);
+    //console.log(this.masteryOneLevel);
   }
 
   levelMasteryTwo() {
@@ -137,7 +137,7 @@ export class MasteryComponent implements OnInit {
       this.masteryPoints = false;
     }
     this.masteryPointSpent = true;
-    console.log(this.masteryTwoLevel);
+    //console.log(this.masteryTwoLevel);
   }
 
   submitMastery() {

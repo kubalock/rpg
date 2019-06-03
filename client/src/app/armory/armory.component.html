@@ -8,7 +8,7 @@
         <div class="tooltip">{{item.name}}<br>
           <span class="tooltiptext">
             <ul style="list-style: none;">
-              <li *ngFor="let line of showItemDetails(item, 'equipped')">
+              <li *ngFor="let line of showItemDetails(item, 'equipped', item.level)">
                 {{line}}
               </li>
             <button mat-mini-button (click)="takeOff(item)">Take off</button> </ul>
@@ -23,7 +23,7 @@
       <div class="tooltip">{{item.name}}<br>
         <span class="tooltiptext">
               <ul style="list-style: none;">
-                <li *ngFor="let line of showItemDetails(item, 'armory')">
+                <li *ngFor="let line of showItemDetails(item, 'armory', item.level)">
                   {{line}}
                   </li>
                   <button mat-mini-button (click)="equip(item)">Equip</button> </ul>

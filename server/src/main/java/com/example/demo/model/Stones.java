@@ -5,7 +5,7 @@
  */
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.micrometer.core.lang.NonNull;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,38 +24,35 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "items")
-public class Item {
+@Table(name = "stones")
+public class Stones {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long item_id;
+    private Long stones_id;
 
-    @OneToOne
-    @JoinColumn(name = "prefix_id")
-    @JsonManagedReference
-    private Prefix prefix;
+    private @NonNull
+    Integer blood_stone;
 
-    @OneToOne
-    @JoinColumn(name = "item_base_id")
-    @JsonManagedReference
-    private ItemBase itemBase;
+    private @NonNull
+    Integer heart_stone;
 
-    @OneToOne
-    @JoinColumn(name = "suffix_id")
-    @JsonManagedReference
-    private Suffix suffix;
+    private @NonNull
+    Integer life_stone;
+
+    private @NonNull
+    Integer soul_stone;
 
     @OneToOne
     @JoinColumn(name = "char_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Hero hero;
-
-    private @NonNull
-    String equipped;
-
-    private @NonNull
-    Integer level;
+    
+    public Stones() {
+        this.blood_stone = 5;
+        this.heart_stone = 0;
+        this.life_stone = 0;
+        this.soul_stone = 0;
+    }
 }
