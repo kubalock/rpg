@@ -30,7 +30,7 @@
       </div> <br>
     <div class="char_basics"><br>
       Health: {{calcHP()}} <button *ngIf="charPoints" mat-mini-button (click)="addHealth()">+</button><br>
-      Strength: {{hero.strength}} <button *ngIf="charPoints" mat-mini-button (click)="addStrength()">+</button><br>
+      Strength: {{calcStrength()}} <button *ngIf="charPoints" mat-mini-button (click)="addStrength()">+</button><br>
       Agility: {{calcAgility()}} <button *ngIf="charPoints" mat-mini-button (click)="addDexterity()">+</button><br>
       Intelligence: {{calcIntelligence()}} <button *ngIf="charPoints" mat-mini-button (click)="addIntelligence()">+</button><br>
       Endurance: {{calcEndurance()}} <button *ngIf="charPoints" mat-mini-button (click)="addEndurance()">+</button><br>

@@ -5,23 +5,22 @@
  */
 package com.example.demo.repository;
 
-import com.example.demo.model.Item;
+import com.example.demo.model.CharShard;
+import com.example.demo.model.Shard;
 import java.util.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  *
  * @author Grzegorz
  */
 @RepositoryRestResource
-public interface ItemRepository extends JpaRepository<Item, Long> {
+@CrossOrigin(origins = "http://localhost:4200")
+public interface CharShardRepository extends JpaRepository<CharShard, Long> {
     
-    @Query("select i from Item i  where char_id = ?1 and equipped = 'no'")
-    Collection<Item> getUserItems(Long char_id);
-    
-    @Query("select i from Item i where char_id = ?1 and equipped = 'yes'")
-    Collection<Item> getEquippedItems(Long  char_id);
-    
+    @Query("select cs from CharShard cs where char_id = ?1")
+    Collection<CharShard> getCharShards(Long char_id);
 }

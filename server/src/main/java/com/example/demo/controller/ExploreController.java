@@ -5,6 +5,7 @@
  */
 package com.example.demo.controller;
 
+import com.example.demo.model.CharShard;
 import com.example.demo.model.Hero;
 import com.example.demo.model.HeroDAO;
 import com.example.demo.model.Monster;
@@ -13,16 +14,20 @@ import com.example.demo.model.ItemBase;
 import com.example.demo.model.Prefix;
 import com.example.demo.model.Suffix;
 import com.example.demo.model.MonsterDAO;
+import com.example.demo.model.Shard;
 import com.example.demo.model.Stones;
+import com.example.demo.repository.CharShardRepository;
 import com.example.demo.repository.HeroRepository;
 import com.example.demo.repository.ItemBaseRepository;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.MonsterRepository;
 import com.example.demo.repository.PrefixRepository;
+import com.example.demo.repository.ShardRepository;
 import com.example.demo.repository.StonesRepository;
 import com.example.demo.repository.SuffixRepository;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +66,18 @@ public class ExploreController {
 
     @Autowired
     private StonesRepository stonesRepository;
+    
+    @Autowired
+    private ShardRepository shardRepository;
+    
+    @Autowired
+    private CharShardRepository charShardRepository;
 
     public ExploreController(HeroRepository hero,
             MonsterRepository monster, ItemRepository item,
             PrefixRepository prefix, SuffixRepository suffix,
-            ItemBaseRepository unique, StonesRepository stones) {
+            ItemBaseRepository unique, StonesRepository stones,
+            ShardRepository shard, CharShardRepository charShard) {
         this.heroRepository = hero;
         this.monsterRepository = monster;
         this.itemRepository = item;
@@ -73,6 +85,8 @@ public class ExploreController {
         this.suffixRepository = suffix;
         this.uniqueItemRepository = unique;
         this.stonesRepository = stones;
+        this.shardRepository = shard;
+        this.charShardRepository = charShard;
     }
 
     @GetMapping("/explore/{level}/{my_id}")
@@ -89,6 +103,8 @@ public class ExploreController {
         int round = 1;
 
         List<MonsterDAO> monsters = this.getMonsters(level);
+        
+        List<Long> monsterIds = new ArrayList<Long>();
 
         int monsterSize = monsters.size();
         int experienceToGain = 0;
@@ -98,6 +114,7 @@ public class ExploreController {
             report.add(line);
         }
         for (MonsterDAO monster : monsters) {
+            monsterIds.add(monster.getId());
             for (String line : monster.info()) {
                 report.add(line);
             }
@@ -224,12 +241,53 @@ public class ExploreController {
                     stonesRepository.save(stones);
                     report.add("A soul stone has been found");
                 }
+                if (this.monsterShard(level)) {
+                    Shard shard = shardRepository.getOne(level);
+                    CharShard charShard = new CharShard();
+                    charShard.setShard(shard);
+                    charShard.setHero(originalMe);
+                    charShard.setLevel(1);
+                    charShardRepository.save(charShard);
+                    report.add("A " + shard.getName() + " has been found");
+                }
+                if (this.relicShard(level)) {
+                    List<Shard> relics = shardRepository.getRelics();
+                    Collections.shuffle(relics);
+                    CharShard charShard = new CharShard();
+                    charShard.setHero(originalMe);
+                    charShard.setLevel(1);
+                    charShard.setShard(relics.get(0));
+                    charShardRepository.save(charShard);
+                    report.add("An " + relics.get(0).getName() + " has been found");
+                }
             }
         } else {
             report.add(me.getChar_name() + " was defeated.");
         }
         heroRepository.save(originalMe);
         return report;
+    }
+    
+    public boolean monsterShard(Long level) {
+        Random rand = new Random();
+        
+        int random = rand.nextInt(100);
+        if (random < 10 + level) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean relicShard(Long level) {
+        Random rand = new Random();
+        
+        int random = rand.nextInt(100);
+        if (random < 5 + level) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean bloodStoneChance(Long level) {
@@ -291,12 +349,12 @@ public class ExploreController {
         }
         int random = rand.nextInt(baseCollection.size());
         item.setItemBase(baseCollection.get(random));
-        if (this.itemChance(level)) {
+        if (this.prefSuffChance(level)) {
             List<Prefix> prefixes = prefixRepository.getPrefixes(item.getItemBase().getType());
             random = rand.nextInt(prefixes.size());
             item.setPrefix(prefixes.get(random));
         }
-        if (this.itemChance(level)) {
+        if (this.prefSuffChance(level)) {
             List<Suffix> suffixes = suffixRepository.getSuffixes(item.getItemBase().getType());
             random = rand.nextInt(suffixes.size());
             item.setSuffix(suffixes.get(random));
@@ -318,11 +376,18 @@ public class ExploreController {
         return output;
     }
 
+    public boolean prefSuffChance(Long level) {
+        Random rand = new Random();
+        int random = rand.nextInt(200);
+        if (random < level * 10) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean itemChance(Long level) {
         Random rand = new Random();
         int random = rand.nextInt(100);
-        System.out.println(random);
-        System.out.println(level * 10);
         if (random < level * 10) {
             return true;
         }
@@ -396,28 +461,28 @@ public class ExploreController {
                 return false;
             }
         } else if (myOffensive > yourDeffensive) {
-            if (difference > 30) {
+            if (Math.round(difference / 2) > 30) {
                 if (random < 90) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 + difference) {
+                if (random < 60 + Math.round(difference / 2)) {
                     return true;
                 } else {
                     return false;
                 }
             }
         } else if (myOffensive < yourDeffensive) {
-            if (difference > 30) {
+            if (Math.round(difference / 2) > 30) {
                 if (random < 30) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 - difference) {
+                if (random < 60 - Math.round(difference / 2)) {
                     return true;
                 } else {
                     return false;
@@ -592,7 +657,7 @@ public class ExploreController {
         int yourDeffensive = monster.getDef_ability();
 
         int difference = Math.abs(myOffensive - yourDeffensive);
-
+        
         if (myOffensive == yourDeffensive) {
             if (random < 60) {
                 return true;
@@ -600,28 +665,28 @@ public class ExploreController {
                 return false;
             }
         } else if (myOffensive > yourDeffensive) {
-            if (difference > 30) {
+            if (Math.round(difference / 2) > 30) {
                 if (random < 90) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 + difference) {
+                if (random < 60 + Math.round(difference / 2)) {
                     return true;
                 } else {
                     return false;
                 }
             }
         } else if (myOffensive < yourDeffensive) {
-            if (difference > 30) {
+            if (Math.round(difference / 2) > 30) {
                 if (random < 30) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 - difference) {
+                if (random < 60 - Math.round(difference / 2)) {
                     return true;
                 } else {
                     return false;
@@ -635,25 +700,32 @@ public class ExploreController {
         Random rand = new Random();
         int random;
 
-        List<Monster> monsters = new ArrayList<Monster>();
-        monsters = monsterRepository.getMonsters(Integer.valueOf(level.intValue()));
+        List<Monster> monsters = monsterRepository.getMonsters(Integer.valueOf(level.intValue()));
 
         List<MonsterDAO> monstersDAO = new ArrayList<MonsterDAO>();
-
-        random = rand.nextInt(100) + 1;
         List<MonsterDAO> duplicates = new ArrayList<MonsterDAO>();
+
+        monstersDAO.add(this.transformMonster(monsters.get(monsters.size() - 1)));
+        monsters.remove(monsters.size() - 1);
+
         for (Monster monster : monsters) {
-            monstersDAO.add(this.transformMonster(monster));
-            for (MonsterDAO monsterDAO : monstersDAO) {
-                while (random > 50) {
-                    MonsterDAO duplicate = new MonsterDAO(monsterDAO);
-                    random = rand.nextInt(100) + 1;
-                    duplicates.add(duplicate);
-                }
-                //this.assingLevels(monster);
+            random = rand.nextInt(100) + 1;
+            if (random > 50) {
+                monstersDAO.add(this.transformMonster(monster));
             }
         }
+
+        for (MonsterDAO monsterDAO : monstersDAO) {
+            random = rand.nextInt(100) + 1;
+            while (random > 50) {
+                MonsterDAO duplicate = new MonsterDAO(monsterDAO);
+                random = rand.nextInt(100);
+                duplicates.add(duplicate);
+            }
+            //this.assingLevels(monster);
+        }
         monstersDAO.addAll(duplicates);
+        
         for (MonsterDAO monsterDAO : monstersDAO) {
             this.assingLevels(monsterDAO);
         }
@@ -671,7 +743,7 @@ public class ExploreController {
         int random;
 
         MonsterDAO monster = monsters;
-        random = rand.nextInt(100) + 1;
+        random = rand.nextInt(50) + 1;
         monster.setLevel(random);
         monster.setHealth((monster.getHealth() * random / 100) + monster.getHealth());
         monster.setRes_fire((monster.getRes_fire() * random / 100) + monster.getRes_fire());
@@ -761,6 +833,31 @@ public class ExploreController {
         if (hero.getIntelligence_percent() > 0) {
             int bonus = hero.getIntelligence() * hero.getIntelligence_percent() / 100;
             hero.setIntelligence(hero.getIntelligence() + bonus);
+            if (hero.getMin_cold() > 0 || hero.getMax_cold() > 0) {
+                hero.setMin_cold(hero.getMin_cold() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_cold(hero.getMax_cold() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_fire() > 0 || hero.getMax_fire() > 0) {
+                hero.setMin_fire(hero.getMin_fire() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_fire(hero.getMax_fire() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_electric() > 0 || hero.getMax_electric() > 0) {
+                hero.setMin_electric(hero.getMin_electric() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_electric(hero.getMax_electric() + Math.round(hero.getIntelligence() / 2));
+            }
+        } else {
+            if (hero.getMin_cold() > 0 || hero.getMax_cold() > 0) {
+                hero.setMin_cold(hero.getMin_cold() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_cold(hero.getMax_cold() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_fire() > 0 || hero.getMax_fire() > 0) {
+                hero.setMin_fire(hero.getMin_fire() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_fire(hero.getMax_fire() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_electric() > 0 || hero.getMax_electric() > 0) {
+                hero.setMin_electric(hero.getMin_electric() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_electric(hero.getMax_electric() + Math.round(hero.getIntelligence() / 2));
+            }
         }
         if (hero.getCold_percent() > 0) {
             int bonusMin = hero.getMin_cold() * hero.getCold_percent() / 100;
@@ -791,6 +888,7 @@ public class ExploreController {
 
     public MonsterDAO transformMonster(Monster monster) {
         MonsterDAO monsterDAO = new MonsterDAO();
+        monsterDAO.setId(monster.getMonster_id());
         monsterDAO.setAttack_speed(monster.getAttack_speed());
         monsterDAO.setBlock(monster.getBlock());
         monsterDAO.setBlock_chance(monster.getBlock_chance());

@@ -27,24 +27,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "skills")
-public class Skill implements Serializable{
-    
+public class Skill implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long skill_id;
-    
+
     private String name;
-    private Integer attack_speed;
-    private Integer damage;
-    private Integer intelligence;
-    private Integer cold_ele_dmg;
-    private Integer hp;
-    private Integer block;
-    private Integer fire_percent;
-    private Integer endurance;
-    private Integer ignore_dmg;
     private Integer agility;
-    
+    private Integer attack_speed;
+    private Integer block;
+    private Integer bleed_percent;
+    private Integer cold_damage;
+    private Integer damage;
+    private Integer ele_dmg;
+    private Integer endurance;
+    private Integer fire_damage;
+    private Integer fire_percent;
+    private Integer intelligence;
+    private Integer hp;
+    private Integer ignore_dmg;
+    private Integer poison_percent;
+    private Integer res_elemental;
+    private Integer strength;
+
     @OneToOne
     @JoinColumn(name = "mastery_id")
     @JsonManagedReference

@@ -86,15 +86,15 @@ public class FightController {
                 me.setStunned(me.getStunned() - 1);
             }
             if (you.getStunned() == 0) {
-            report.add(this.oneRound(you, me));
-            if (you.getAttack_speed() > 100) {
-                if (random < you.getAttack_speed() - 100) {
-                    report.add(this.oneRound(you, me));
+                report.add(this.oneRound(you, me));
+                if (you.getAttack_speed() > 100) {
+                    if (random < you.getAttack_speed() - 100) {
+                        report.add(this.oneRound(you, me));
+                    }
+                    if (random < you.getAttack_speed() - 200) {
+                        report.add(this.oneRound(you, me));
+                    }
                 }
-                if (random < you.getAttack_speed() - 200) {
-                    report.add(this.oneRound(you, me));
-                }
-            }
             } else {
                 report.add(you.getChar_name() + " is stunned and cannot attack.");
                 me.setStunned(you.getStunned() - 1);
@@ -195,6 +195,31 @@ public class FightController {
         if (hero.getIntelligence_percent() > 0) {
             int bonus = hero.getIntelligence() * hero.getIntelligence_percent() / 100;
             hero.setIntelligence(hero.getIntelligence() + bonus);
+            if (hero.getMin_cold() > 0 || hero.getMax_cold() > 0) {
+                hero.setMin_cold(hero.getMin_cold() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_cold(hero.getMax_cold() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_fire() > 0 || hero.getMax_fire() > 0) {
+                hero.setMin_fire(hero.getMin_fire() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_fire(hero.getMax_fire() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_electric() > 0 || hero.getMax_electric() > 0) {
+                hero.setMin_electric(hero.getMin_electric() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_electric(hero.getMax_electric() + Math.round(hero.getIntelligence() / 2));
+            }
+        } else {
+            if (hero.getMin_cold() > 0 || hero.getMax_cold() > 0) {
+                hero.setMin_cold(hero.getMin_cold() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_cold(hero.getMax_cold() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_fire() > 0 || hero.getMax_fire() > 0) {
+                hero.setMin_fire(hero.getMin_fire() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_fire(hero.getMax_fire() + Math.round(hero.getIntelligence() / 2));
+            }
+            if (hero.getMin_electric() > 0 || hero.getMax_electric() > 0) {
+                hero.setMin_electric(hero.getMin_electric() + Math.round(hero.getIntelligence() / 2));
+                hero.setMax_electric(hero.getMax_electric() + Math.round(hero.getIntelligence() / 2));
+            }
         }
         if (hero.getCold_percent() > 0) {
             int bonusMin = hero.getMin_cold() * hero.getCold_percent() / 100;
@@ -239,28 +264,28 @@ public class FightController {
                 return false;
             }
         } else if (myOffensive > yourDeffensive) {
-            if (difference > 30) {
+            if (Math.round(difference/2) > 30) {
                 if (random < 90) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 + difference) {
+                if (random < 60 + Math.round(difference/2)) {
                     return true;
                 } else {
                     return false;
                 }
             }
         } else if (myOffensive < yourDeffensive) {
-            if (difference > 30) {
+            if (Math.round(difference/2) > 30) {
                 if (random < 30) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 - difference) {
+                if (random < 60 - Math.round(difference/2)) {
                     return true;
                 } else {
                     return false;

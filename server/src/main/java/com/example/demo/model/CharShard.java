@@ -6,7 +6,6 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import io.micrometer.core.lang.NonNull;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,42 +25,29 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "items")
-public class Item {
+@Table(name = "char_shards")
+public class CharShard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long item_id;
-
-    @OneToOne
-    @JoinColumn(name = "prefix_id")
-    @JsonManagedReference
-    private Prefix prefix;
-
-    @OneToOne
-    @JoinColumn(name = "item_base_id")
-    @JsonManagedReference
-    private ItemBase itemBase;
-
-    @OneToOne
-    @JoinColumn(name = "suffix_id")
-    @JsonManagedReference
-    private Suffix suffix;
+    private Long char_shards_id;
 
     @OneToOne
     @JoinColumn(name = "char_id")
     @JsonManagedReference
     private Hero hero;
 
-    private @NonNull
-    String equipped;
-
-    private @NonNull
-    Integer level;
-
     @OneToOne
     @JoinColumn(name = "shard_id")
     @JsonManagedReference
-    private CharShard shard_id;
-
+    private Shard shard;
+    
+    private Integer level;
+    
+    private Integer armor;
+    
+    private Integer def_ability;
+    
+    private Integer res_bleed;
+    private Integer res_cold;
 }

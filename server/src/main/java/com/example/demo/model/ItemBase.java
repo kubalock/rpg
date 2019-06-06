@@ -55,6 +55,7 @@ public class ItemBase {
     private Integer dmg_electric_percent;
     private Integer dmg_fire_percent;
     private Integer dmg_poison_percent;
+    private Integer endurance_percent;
     private Integer health;
     private Integer health_percent;
     private Integer health_regen;

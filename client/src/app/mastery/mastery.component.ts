@@ -44,6 +44,8 @@ export class MasteryComponent implements OnInit {
   skills: any = [];
   masteries: any = [];
 
+  masteriess: any = [];
+
 
   constructor(private characterService: CharacterService,
               private router: Router,
@@ -67,6 +69,7 @@ export class MasteryComponent implements OnInit {
           this.firstMastery = true;
           this.masteryService.getMasteries(this.hero.char_id).subscribe((masteries: any) => {
             this.masteries = masteries;
+            this.masteriess = this.masteries;
             if(this.masteries[0] != null) {
               this.masteryOneLevel = this.masteries[0];
               this.masteryOne = this.masteries[0].mastery;
@@ -77,13 +80,8 @@ export class MasteryComponent implements OnInit {
                   if(skill.skill.mastery.mastery_id == this.masteryOne.mastery_id) {
                     this.skillsOne.push(skill);
                   }
-                } });
-              } else {
-              this.masteryService.getListOfMasteries().subscribe((result: any) => {
-                this.allMasteries = result;
-              });
-            } });
-          }
+                }
+
             if(this.hero.level > 7) {
               this.secondMastery = true;
               if(this.masteries[1] != null) {
@@ -101,9 +99,18 @@ export class MasteryComponent implements OnInit {
           });
         }
           }
+          });
+        }
+        else {
+          this.masteryService.getListOfMasteries().subscribe((result: any) => {
+            this.allMasteries = result;
+          });
+        }
         });
+      }
               this.appComponent.getResources();
-  }
+            });
+          }
     else {
       this.router.navigate(['/character']);
     }
@@ -152,7 +159,7 @@ export class MasteryComponent implements OnInit {
       this.updatedMastery.id = this.masteryTwoLevel.char_mastery_id;
       this.updatedMastery.mastery_level = this.masteryTwoLevel.mastery_level;
       this.masteryService.updateMastery(this.updatedMastery).subscribe();
-      for(let skill of this.skillsOne) {
+      for(let skill of this.skillsTwo) {
         this.skillService.saveSkill(skill).subscribe();
       }
     }
@@ -214,16 +221,24 @@ export class MasteryComponent implements OnInit {
         this.hero.min_damage = this.hero.min_damage + skill.skill.damage;
         this.hero.max_damage = this.hero.max_damage + skill.skill.damage;
         this.hero.intelligence_percent = this.hero.intelligence_percent + skill.skill.intelligence;
-        this.hero.min_electric = this.hero.min_electric + skill.skill.cold_ele_dmg;
-        this.hero.max_electric = this.hero.max_electric + skill.skill.cold_ele_dmg;
-        this.hero.min_cold = this.hero.min_cold + skill.skill.cold_ele_dmg;
-        this.hero.max_cold = this.hero.max_cold + skill.skill.cold_ele_dmg;
+        this.hero.min_electric = this.hero.min_electric + skill.skill.ele_dmg;
+        this.hero.max_electric = this.hero.max_electric + skill.skill.ele_dmg;
+        this.hero.min_cold = this.hero.min_cold + skill.skill.cold_damage;
+        this.hero.max_cold = this.hero.max_cold + skill.skill.cold_damage;
         this.hero.hp_percent = this.hero.hp_percent + skill.skill.hp;
         this.hero.block_chance = this.hero.block_chance + skill.skill.block;
         this.hero.fire_percent = this.hero.fire_percent + skill.skill.fire_percent;
         this.hero.endurance_percent = this.hero.endurance_percent + skill.skill.endurance;
         this.hero.ignore_dmg_percent = this.hero.ignore_dmg_percent + skill.skill.ignore_dmg;
         this.hero.agility_percent = this.hero.agility_percent + skill.skill.agility;
+        this.hero.bleed_percent = this.hero.bleed_percent + skill.skill.bleed_percent;
+        this.hero.min_fire = this.hero.min_fire + skill.skill.fire_damage;
+        this.hero.max_fire = this.hero.max_fire + skill.skill.fire_damage;
+        this.hero.poison_percent = this.hero.poison_percent + skill.skill.poison_percent;
+        this.hero.res_cold = this.hero.res_cold + skill.skill.res_elemental;
+        this.hero.res_electric = this.hero.res_electric + skill.skill.res_elemental;
+        this.hero.res_fire = this.hero.res_fire + skill.skill.res_elemental;
+        this.hero.strength_percent = this.hero.strength_percent + skill.skill.strength;
       }
       }
     } else if (which == "two") {
@@ -234,16 +249,24 @@ export class MasteryComponent implements OnInit {
         this.hero.min_damage = this.hero.min_damage + skill.skill.damage;
         this.hero.max_damage = this.hero.max_damage + skill.skill.damage;
         this.hero.intelligence_percent = this.hero.intelligence_percent + skill.skill.intelligence;
-        this.hero.min_electric = this.hero.min_electric + skill.skill.cold_ele_dmg;
-        this.hero.max_electric = this.hero.max_electric + skill.skill.cold_ele_dmg;
-        this.hero.min_cold = this.hero.min_cold + skill.skill.cold_ele_dmg;
-        this.hero.max_cold = this.hero.max_cold + skill.skill.cold_ele_dmg;
+        this.hero.min_electric = this.hero.min_electric + skill.skill.ele_dmg;
+        this.hero.max_electric = this.hero.max_electric + skill.skill.ele_dmg;
+        this.hero.min_cold = this.hero.min_cold + skill.skill.cold_damage;
+        this.hero.max_cold = this.hero.max_cold + skill.skill.cold_damage;
         this.hero.hp_percent = this.hero.hp_percent + skill.skill.hp;
         this.hero.block_chance = this.hero.block_chance + skill.skill.block;
         this.hero.fire_percent = this.hero.fire_percent + skill.skill.fire_percent;
         this.hero.endurance_percent = this.hero.endurance_percent + skill.skill.endurance;
         this.hero.ignore_dmg_percent = this.hero.ignore_dmg_percent + skill.skill.ignore_dmg;
         this.hero.agility_percent = this.hero.agility_percent + skill.skill.agility;
+        this.hero.bleed_percent = this.hero.bleed_percent + skill.skill.bleed_percent;
+        this.hero.min_fire = this.hero.min_fire + skill.skill.fire_damage;
+        this.hero.max_fire = this.hero.max_fire + skill.skill.fire_damage;
+        this.hero.poison_percent = this.hero.poison_percent + skill.skill.poison_percent;
+        this.hero.res_cold = this.hero.res_cold + skill.skill.res_elemental;
+        this.hero.res_electric = this.hero.res_electric + skill.skill.res_elemental;
+        this.hero.res_fire = this.hero.res_fire + skill.skill.res_elemental;
+        this.hero.strength_percent = this.hero.strength_percent + skill.skill.strength;
       }
       }
     }
@@ -261,14 +284,20 @@ export class MasteryComponent implements OnInit {
         if(skill.skill.attack_speed) {
           return "Attack speed +" + (skill.skill.attack_speed * skill.level) + "%";
         }
+        if(skill.skill.bleed_percent) {
+          return "Bleed damage +" + (skill.skill.bleed_percent * skill.level) + "%";
+        }
         if(skill.skill.damage) {
-          return "Damage +" + (skill.skill.damage * skill.level) + "<--- this needs to be change for percentages";
+          return "Damage +" + (skill.skill.damage * skill.level);
         }
         if(skill.skill.intelligence) {
           return "Intelligence +" + (skill.skill.intelligence * skill.level) + "%";
         }
-        if(skill.skill.cold_ele_dmg) {
-          return "Cold and Electric damage +" + (skill.skill.cold_ele_dmg * skill.level);
+        if(skill.skill.cold_damage) {
+          return "Cold damage +" + (skill.skill.cold_damage * skill.level);
+        }
+        if(skill.skill.ele_dmg) {
+          return "Electric damage +" + (skill.skill.ele_dmg * skill.level);
         }
         if(skill.skill.hp) {
           return "Health +" + (skill.skill.hp * skill.level) + "%";
@@ -279,14 +308,26 @@ export class MasteryComponent implements OnInit {
         if(skill.skill.fire_percent) {
           return "Fire damage +" + (skill.skill.fire_percent * skill.level) + "%";
         }
+        if(skill.skill.fire_damage) {
+          return "Fire damage +" + (skill.skill.fire_damage * skill.level);
+        }
         if(skill.skill.endurance) {
           return "Endurance +" + (skill.skill.endurance * skill.level) + "%";
+        }
+        if(skill.skill.poison_percent) {
+          return "Poison damage +" + (skill.skill.poison_percent * skill.level) + "%";
+        }
+        if(skill.skill.res_elemental) {
+          return "Elemental resistances +"  + (skill.skill.res_elemental * skill.level) + "%";
         }
         if(skill.skill.ignore_dmg) {
           return "Ignore " + (skill.skill.ignore_dmg * skill.level) + "% of dmg";
         }
         if(skill.skill.agility) {
           return "Agility +" + (skill.skill.agility * skill.level) + "%";
+        }
+        if(skill.skill.strength) {
+          return "Strength +" + (skill.skill.strength * skill.level) + "%";
         }
       }
     }
@@ -296,14 +337,20 @@ export class MasteryComponent implements OnInit {
           if(skill.skill.attack_speed) {
             return "Attack speed +" + (skill.skill.attack_speed * skill.level) + "%";
           }
+          if(skill.skill.bleed_percent) {
+            return "Bleed damage +" + (skill.skill.bleed_percent * skill.level) + "%";
+          }
           if(skill.skill.damage) {
-            return "Damage +" + (skill.skill.damage * skill.level) + "<--- this needs to be change for percentages";
+            return "Damage +" + (skill.skill.damage * skill.level);
           }
           if(skill.skill.intelligence) {
             return "Intelligence +" + (skill.skill.intelligence * skill.level) + "%";
           }
-          if(skill.skill.cold_ele_dmg) {
-            return "Cold and Electric damage +" + (skill.skill.cold_ele_dmg * skill.level);
+          if(skill.skill.cold_damage) {
+            return "Cold damage +" + (skill.skill.cold_damage * skill.level);
+          }
+          if(skill.skill.ele_dmg) {
+            return "Electric damage +" + (skill.skill.ele_dmg * skill.level);
           }
           if(skill.skill.hp) {
             return "Health +" + (skill.skill.hp * skill.level) + "%";
@@ -314,14 +361,26 @@ export class MasteryComponent implements OnInit {
           if(skill.skill.fire_percent) {
             return "Fire damage +" + (skill.skill.fire_percent * skill.level) + "%";
           }
+          if(skill.skill.fire_damage) {
+            return "Fire damage +" + (skill.skill.fire_damage * skill.level);
+          }
           if(skill.skill.endurance) {
             return "Endurance +" + (skill.skill.endurance * skill.level) + "%";
+          }
+          if(skill.skill.poison_percent) {
+            return "Poison damage +" + (skill.skill.poison_percent * skill.level) + "%";
+          }
+          if(skill.skill.res_elemental) {
+            return "Elemental resistances +"  + (skill.skill.res_elemental * skill.level) + "%";
           }
           if(skill.skill.ignore_dmg) {
             return "Ignore " + (skill.skill.ignore_dmg * skill.level) + "% of dmg";
           }
           if(skill.skill.agility) {
             return "Agility +" + (skill.skill.agility * skill.level) + "%";
+          }
+          if(skill.skill.strength) {
+            return "Strength +" + (skill.skill.strength * skill.level) + "%";
           }
         }
       }

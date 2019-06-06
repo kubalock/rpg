@@ -159,10 +159,10 @@ public class Hero {
         this.points = 0;
         this.mastery_points = 0;
         this.health = 200;
-        this.strength = 10;
-        this.agility = 10;
-        this.intelligence = 10;
-        this.endurance = 10;
+        this.strength = 15;
+        this.agility = 15;
+        this.intelligence = 15;
+        this.endurance = 15;
         this.luck = 0;
         this.res_fire = 0;
         this.res_cold = 0;

@@ -155,7 +155,7 @@ export class CharacterInfoComponent implements OnInit {
 
   calcStrength() {
     if(this.hero.strength_percent > 0) {
-      return this.hero.strength + ((this.hero.strength_percent/100) * this.hero.strength);
+      return this.hero.strength + (Math.round((this.hero.strength_percent/100) * this.hero.strength));
     } else {
       return this.hero.strength;
     }
@@ -209,53 +209,65 @@ export class CharacterInfoComponent implements OnInit {
       }
     }
 
-  calcMinFire() {
-      if(this.hero.fire_percent > 0) {
-        return (this.hero.min_fire + ((this.hero.fire_percent/100) * this.hero.min_fire)).toFixed();
-      } else {
-        return this.hero.min_fire;
-      }
-    }
-
-  calcMaxFire() {
-      if(this.hero.fire_percent > 0) {
-        return (this.hero.max_fire + ((this.hero.fire_percent/100) * this.hero.max_fire)).toFixed();
-      } else {
-        return this.hero.max_fire;
-      }
-    }
-
-  calcMinCold() {
-        if(this.hero.cold_percent > 0) {
-          return (this.hero.min_cold + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
+    calcMinFire() {
+        if(this.hero.fire_percent > 0) {
+          return (this.hero.min_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.min_fire)).toFixed();
         } else {
-          return this.hero.min_cold;
+          if(this.hero.min_fire > 0) {
+          return this.hero.min_fire + Math.round(this.calcIntelligence() / 2);
+        }
         }
       }
 
-  calcMaxCold() {
-        if(this.hero.cold_percent > 0) {
-          return (this.hero.max_cold + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
+    calcMaxFire() {
+        if(this.hero.fire_percent > 0) {
+          return (this.hero.max_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.max_fire)).toFixed();
         } else {
-          return this.hero.max_cold;
+          if(this.hero.max_fire > 0) {
+          return this.hero.max_fire + Math.round(this.calcIntelligence() / 2);
+        }
         }
       }
 
-  calcMinElectric() {
-          if(this.hero.electric_percent > 0) {
-            return (this.hero.min_electric + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
+      calcMinCold() {
+          if(this.hero.cold_percent > 0) {
+            return (this.hero.min_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
           } else {
-            return this.hero.min_electric;
+            if(this.hero.min_cold > 0) {
+            return this.hero.min_cold + Math.round(this.calcIntelligence() / 2);
+          }
           }
         }
 
-  calcMaxElectric() {
-          if(this.hero.electric_percent > 0) {
-            return (this.hero.max_electric + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
+      calcMaxCold() {
+          if(this.hero.cold_percent > 0) {
+            return (this.hero.max_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
           } else {
-            return this.hero.max_electric;
+            if(this.hero.max_cold > 0) {
+            return this.hero.max_cold + Math.round(this.calcIntelligence() / 2);
+          }
           }
         }
+
+        calcMinElectric() {
+            if(this.hero.electric_percent > 0) {
+              return (this.hero.min_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
+            } else {
+              if(this.hero.min_electric > 0) {
+              return this.hero.min_electric + Math.round(this.calcIntelligence() / 2);
+            }
+            }
+          }
+
+        calcMaxElectric() {
+            if(this.hero.electric_percent > 0) {
+              return (this.hero.max_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
+            } else {
+              if(this.hero.max_electric > 0) {
+              return this.hero.max_electric + Math.round(this.calcIntelligence() / 2);
+            }
+            }
+          }
 
   calcMinBleed() {
             if(this.hero.bleed_percent > 0) {
@@ -318,10 +330,10 @@ export class CharacterInfoComponent implements OnInit {
     }
 
   calcHealthRegen() {
-    return this.hero.health_regen + (this.calcEndurance()/2);
+    return this.hero.health_regen + Math.round((this.calcEndurance()/2));
   }
 
   calcDefense() {
-    return this.hero.defense + (this.calcEndurance()/2);
+    return this.hero.defense + Math.round((this.calcEndurance()/2));
   }
   }

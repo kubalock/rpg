@@ -29,6 +29,7 @@ import { GuildComponent } from './guild/guild.component';
 import { GuildListComponent } from './guild-list/guild-list.component';
 import { GuildInfoComponent } from './guild-info/guild-info.component';
 import { BlacksmithComponent } from './blacksmith/blacksmith.component';
+import { AlchemistComponent } from './alchemist/alchemist.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { BlacksmithComponent } from './blacksmith/blacksmith.component';
     GuildComponent,
     GuildListComponent,
     GuildInfoComponent,
-    BlacksmithComponent
+    BlacksmithComponent,
+    AlchemistComponent
   ],
   imports: [
     BrowserModule,

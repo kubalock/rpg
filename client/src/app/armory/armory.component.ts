@@ -96,6 +96,21 @@ export class ArmoryComponent implements OnInit {
               if(item.suffix != null) {
                 item.name = item.name + " " + item.suffix.name;
               }
+              if(item.level > 0 && item.level < 5) {
+                item.name = item.name + " +" + item.level;
+              }
+              if(item.level >= 5 && item.level < 10) {
+                item.name = "Good " + item.name;
+                if(item.level > 5) {
+                  item.name = item.name + " +" + (item.level - 5);
+                }
+              }
+              if(item.level >= 10) {
+                item.name = "Legendary " + item.name;
+                if(item.level > 10) {
+                  item.name = item.name + " +" + (item.level - 10);
+                }
+              }
               if(item.itemBase.type == "Head") {
                 this.headFree = false;
                 this.head = item;
@@ -172,6 +187,7 @@ export class ArmoryComponent implements OnInit {
     let dmg_percent_electric: any = 0;
     let dmg_percent_fire: any = 0;
     let dmg_percent_poison: any = 0;
+    let endurance_percent: any = 0;
     let health: any = 0;
     let health_percent: any = 0;
     let health_regen: any = 0;
@@ -393,6 +409,9 @@ export class ArmoryComponent implements OnInit {
       }
       if(this.item.itemBase.dmg_poison_percent != null) {
         dmg_percent_poison = dmg_percent_poison + Math.round(this.item.itemBase.dmg_poison_percent * bonusMultiply);
+      }
+      if(this.item.itemBase.endurance_percent != null) {
+        endurance_percent = endurance_percent + Math.round(this.item.itemBase.endurance_percent * bonusMultiply);
       }
       if(this.item.itemBase.health != null) {
         health = health + Math.round(this.item.itemBase.health * bonusMultiply);
@@ -647,6 +666,9 @@ export class ArmoryComponent implements OnInit {
     if(agility_percent != 0) {
       itemDescription.push(" Agility +" + agility_percent + "%");
     }
+    if(endurance_percent != 0) {
+      itemDescription.push(" Endurance +" + endurance_percent + "%");
+    }
     if(health_percent != 0) {
       itemDescription.push(" Health +" + health_percent + "%");
     }
@@ -767,9 +789,9 @@ export class ArmoryComponent implements OnInit {
               intelligence = Math.round(item.itemBase.req_intelligence * requirementMultiply);
             }
 
-            if(this.hero.strength >= strength &&
-              this.hero.intelligence >= intelligence &&
-              this.hero.agility >= agility) {
+            if(Math.round(this.hero.strength + (this.hero.strength*this.hero.strength_percent/100)) >= strength &&
+              Math.round(this.hero.intelligence + (this.hero.intelligence*this.hero.intelligence_percent/100)) >= intelligence &&
+              Math.round(this.hero.agility + (this.hero.agility*this.hero.agility_percent/100))>= agility) {
 
                 item.equipped = "yes";
                 if(item.itemBase.type == "Head") {

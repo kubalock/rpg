@@ -45,14 +45,14 @@ public class MonsterDAO {
     /**
      * @return the id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -476,7 +476,7 @@ public class MonsterDAO {
         this.experience = experience;
     }
     
-    private int id;
+    private Long id;
     
     private 
     String monster_name;

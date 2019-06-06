@@ -80,7 +80,7 @@ export class CharacterSelectedComponent implements OnInit {
 
   calcStrength() {
     if(this.hero.strength_percent > 0) {
-      return this.hero.strength + ((this.hero.strength_percent/100) * this.hero.strength);
+      return this.hero.strength + (Math.round((this.hero.strength_percent/100) * this.hero.strength));
     } else {
       return this.hero.strength;
     }
@@ -132,49 +132,61 @@ export class CharacterSelectedComponent implements OnInit {
 
   calcMinFire() {
       if(this.hero.fire_percent > 0) {
-        return (this.hero.min_fire + ((this.hero.fire_percent/100) * this.hero.min_fire)).toFixed();
+        return (this.hero.min_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.min_fire)).toFixed();
       } else {
-        return this.hero.min_fire;
+        if(this.hero.min_fire > 0) {
+        return this.hero.min_fire + Math.round(this.calcIntelligence() / 2);
+      }
       }
     }
 
   calcMaxFire() {
       if(this.hero.fire_percent > 0) {
-        return (this.hero.max_fire + ((this.hero.fire_percent/100) * this.hero.max_fire)).toFixed();
+        return (this.hero.max_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.max_fire)).toFixed();
       } else {
-        return this.hero.max_fire;
+        if(this.hero.max_fire > 0) {
+        return this.hero.max_fire + Math.round(this.calcIntelligence() / 2);
+      }
       }
     }
 
     calcMinCold() {
         if(this.hero.cold_percent > 0) {
-          return (this.hero.min_cold + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
+          return (this.hero.min_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
         } else {
-          return this.hero.min_cold;
+          if(this.hero.min_cold > 0) {
+          return this.hero.min_cold + Math.round(this.calcIntelligence() / 2);
+        }
         }
       }
 
     calcMaxCold() {
         if(this.hero.cold_percent > 0) {
-          return (this.hero.max_cold + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
+          return (this.hero.max_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
         } else {
-          return this.hero.max_cold;
+          if(this.hero.max_cold > 0) {
+          return this.hero.max_cold + Math.round(this.calcIntelligence() / 2);
+        }
         }
       }
 
       calcMinElectric() {
           if(this.hero.electric_percent > 0) {
-            return (this.hero.min_electric + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
+            return (this.hero.min_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
           } else {
-            return this.hero.min_electric;
+            if(this.hero.min_electric > 0) {
+            return this.hero.min_electric + Math.round(this.calcIntelligence() / 2);
+          }
           }
         }
 
       calcMaxElectric() {
           if(this.hero.electric_percent > 0) {
-            return (this.hero.max_electric + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
+            return (this.hero.max_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
           } else {
-            return this.hero.max_electric;
+            if(this.hero.max_electric > 0) {
+            return this.hero.max_electric + Math.round(this.calcIntelligence() / 2);
+          }
           }
         }
 
@@ -235,10 +247,10 @@ export class CharacterSelectedComponent implements OnInit {
     }
 
   calcHealthRegen() {
-    return this.hero.health_regen + (this.calcEndurance()/2);
+    return this.hero.health_regen + Math.round((this.calcEndurance()/2));
   }
 
   calcDefense() {
-    return this.hero.defense + (this.calcEndurance()/2);
+    return this.hero.defense + Math.round((this.calcEndurance()/2));
   }
 }

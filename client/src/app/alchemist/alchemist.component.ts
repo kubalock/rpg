@@ -4,70 +4,120 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemService } from '../shared/item/item.service';
 import { AppComponent } from '../app.component';
-import { BlacksmithService } from '../shared/blacksmith/blacksmith.service';
+import { ShardService } from '../shared/shard/shard.service';
 
 @Component({
-  selector: 'app-blacksmith',
-  templateUrl: './blacksmith.component.html',
-  styleUrls: ['./blacksmith.component.css']
+  selector: 'app-alchemist',
+  templateUrl: './alchemist.component.html',
+  styleUrls: ['./alchemist.component.css']
 })
-export class BlacksmithComponent implements OnInit {
+export class AlchemistComponent implements OnInit {
+
+  shards: Array<any>;
+  sameShards: Array<any>;
+
+  shard: any = {};
 
   armory: Array<any>;
-
-  stones: any = {};
-
   item: any = {};
 
-  selectedItem: any = {};
+  selectedShard: any = {};
 
-  nextLevel: Array<any>;
+  assembleTrue = false;
+  enchanceTrue = false;
 
-  constructor( private router: Router,
+  constructor(private router: Router,
               private route: ActivatedRoute,
               private itemService: ItemService,
               private appComponent: AppComponent,
-              private blacksmithService: BlacksmithService) { }
+              private shardService: ShardService) { }
 
   ngOnInit() {
     if(sessionStorage.getItem('user_id') == 'undefined') {
       this.router.navigate(['/index']);
     }
     if(sessionStorage.getItem('hero') != null) {
-        this.itemService.getUserItems(sessionStorage.getItem('char_id')).subscribe((result: any) => {
-          this.armory = result;
-          for (let item of this.armory) {
-            item.name = item.itemBase.name;
-            if(item.prefix != null) {
-              item.name = item.prefix.name + " " + item.name;
-            }
-            if(item.suffix != null) {
-              item.name = item.name + " " + item.suffix.name;
-            }
-            if(item.level > 0 && item.level < 5) {
-              item.name = item.name + " +" + item.level;
-            }
-            if(item.level >= 5 && item.level < 10) {
-              item.name = "Good " + item.name;
-              if(item.level > 5) {
-                item.name = item.name + " +" + (item.level - 5);
-              }
-            }
-            if(item.level >= 10) {
-              item.name = "Legendary " + item.name;
-              if(item.level > 10) {
-                item.name = item.name + " +" + (item.level - 10);
-              }
-            }
-          }
-        });
-      this.blacksmithService.getCharStones(sessionStorage.getItem('char_id')).subscribe((result: any) => {
-        this.stones = result;
+      this.shardService.getCharShards(sessionStorage.getItem('char_id')).subscribe((result: any) => {
+        this.shards = result;
+        console.log(this.shards);
       });
+
       this.appComponent.getResources();
     } else {
       this.router.navigate(['/character']);
     }
+  }
+
+  assemble(shard: any) {
+    this.selectedShard = shard;
+
+
+    this.assembleTrue = true;
+    this.enchanceTrue = false;
+  }
+
+  enchance(shard: any) {
+    this.selectedShard = shard;
+    this.itemService.getItemToEnchance(sessionStorage.getItem('char_id'), this.selectedShard.shard.shard_id).subscribe((result: any) => {
+      this.armory = result;
+      for (let item of this.armory) {
+        item.name = item.itemBase.name;
+        if(item.prefix != null) {
+          item.name = item.prefix.name + " " + item.name;
+        }
+        if(item.suffix != null) {
+          item.name = item.name + " " + item.suffix.name;
+        }
+        if(item.level > 0 && item.level < 5) {
+          item.name = item.name + " +" + item.level;
+        }
+        if(item.level >= 5 && item.level < 10) {
+          item.name = "Good " + item.name;
+          if(item.level > 5) {
+            item.name = item.name + " +" + (item.level - 5);
+          }
+        }
+        if(item.level >= 10) {
+          item.name = "Legendary " + item.name;
+          if(item.level > 10) {
+            item.name = item.name + " +" + (item.level - 10);
+          }
+        }
+      }
+    });
+    this.enchanceTrue = true;
+    this.assembleTrue = false;
+  }
+
+  showShardDetails(shard: string) {
+    var armor: any = 0;
+
+    var res_bleed: any = 0;
+
+    var shardDescription: any = [];
+
+    this.shard = this.shards.find(shardd => shardd == shard);
+
+    if(this.shard.shard.armor != null) {
+      armor = this.shard.shard.armor * this.shard.level;
+    }
+    if(this.shard.shard.res_bleed != null) {
+      res_bleed = this.shard.shard.res_bleed * this.shard.level;
+    }
+
+    shardDescription.push(this.shard.shard.name);
+    shardDescription.push("Type: " + this.shard.shard.type_eq);
+    shardDescription.push("Level " + this.shard.level + "/5");
+    shardDescription.push("-------");
+    if(armor != 0) {
+      shardDescription.push(" Armor +" + armor);
+    }
+
+    if(res_bleed != 0) {
+      shardDescription.push(" Bleed resistance +" + res_bleed + "%");
+    }
+
+    return shardDescription;
   }
 
   showItemDetails(item: string, where: string, requestLevel: string) {
@@ -645,68 +695,5 @@ export class BlacksmithComponent implements OnInit {
       itemDescription.push("Level: " + level);
     }
     return itemDescription;
-  }
-
-  select(item: any) {
-    let level = item.level + 1;
-    this.selectedItem = item;
-    this.nextLevel = this.showItemDetails(item, 'armory', level);
-    this.nextLevel.push("-------");
-    this.nextLevel.push("Cost:");
-    if(item.level < 4) {
-      this.nextLevel.push("Blood stone: 1");
-      this.nextLevel.push("Chances for success: 80%");
-    }
-    if(item.level == 4 || item.level == 9) {
-      this.nextLevel.push("Life stone: 1");
-      this.nextLevel.push("Chances for success: 50%");
-    }
-    if(item.level > 4 && item.level < 9) {
-      this.nextLevel.push("Heart Stone: 1");
-      this.nextLevel.push("Chances for success: 60%");
-    }
-    if(item.level > 9) {
-      this.nextLevel.push("Soul stone: 1");
-      this.nextLevel.push("Chances for success: 40%");
-    }
-  }
-
-  upgradeButton() {
-    let success: boolean;
-    if(this.selectedItem.level < 4) {
-      if(this.stones.blood_stone > 0) {
-      this.upgradeItem(this.selectedItem);
-    } else {
-      console.log("Not enough stones");
-    }
-  } else if (this.selectedItem.level == 4 || this.selectedItem.level == 9) {
-    if(this.stones.life_stone > 0) {
-      this.upgradeItem(this.selectedItem);
-    } else {
-      console.log("Not enough stones");
-    }
-  } else if (this.selectedItem.level > 4 && this.selectedItem.level < 9) {
-    if(this.stones.heart_stone > 0) {
-      this.upgradeItem(this.selectedItem);
-    } else {
-      console.log("Not enough stones");
-    }
-  } else if (this.selectedItem.level > 9) {
-      if(this.stones.soul_stone > 0) {
-      this.upgradeItem(this.selectedItem);
-    } else {
-      console.log("Not enough stones");
-    }
-    }
-  }
-
-  upgradeItem(item: any) {
-    this.blacksmithService.upgradeItem(item.item_id, sessionStorage.getItem('char_id')).subscribe((result: boolean) => {
-      if(result) {
-        console.log("Upgrade was a success");
-      } else {
-        console.log("Upgrade did not succeed");
-      }
-    });
   }
 }

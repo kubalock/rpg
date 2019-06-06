@@ -5,16 +5,12 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class BlacksmithService {
+export class ShardService {
   public API = '//localhost:8080';
 
   constructor(private http: HttpClient) { }
 
-  getCharStones(id: String) {
-      return this.http.get(this.API + '/getCharStones/' + id);
-  }
-
-  upgradeItem(id: string, char_id: string) {
-    return this.http.get(this.API + '/upgradeItem/' + id + '/' + char_id);
+  getCharShards(id: String) {
+    return this.http.get(this.API + '/getCharShards/' + id);
   }
 }

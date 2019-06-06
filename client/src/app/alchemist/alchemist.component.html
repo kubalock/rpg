@@ -1,0 +1,42 @@
+<mat-card>
+<div class="alchemist">
+    Possesion of shards: <br>
+    <ul style="list-style: none;">
+      <li *ngFor="let shard of shards">
+        <div class="tooltip">{{shard.shard.name}} ({{shard.level}})<br>
+          <span class="tooltiptext">
+                <ul style="list-style: none;">
+                  <li *ngFor="let line of showShardDetails(shard)">
+                    {{line}}
+                    </li>
+                </ul>
+              </span>
+        </div>
+        <button mat-mini-button (click)="assemble(shard)">Assemble</button>
+        <button mat-mini-button (click)="enchance(shard)">Enchance</button>
+        </li>
+    </ul>
+</div>
+
+<div *ngIf="enchanceTrue">
+  Select item to enchance:
+  <ul style="list-style: none;">
+    <li *ngFor="let item of armory; let i = index">
+      <div class="tooltip">{{item.name}}  <br>
+        <span class="tooltiptext">
+              <ul style="list-style: none;">
+                <li *ngFor="let line of showItemDetails(item, 'armory', item.level)">
+                  {{line}}
+                  </li>
+              </ul>
+            </span>
+      </div>
+      <button mat-mini-button (click)="select(item)">Select</button>
+    </li>
+  </ul>
+  </div>
+
+  <div *ngIf="assembleTrue">
+    Select shard to assemble:<br>
+    </div>
+</mat-card>

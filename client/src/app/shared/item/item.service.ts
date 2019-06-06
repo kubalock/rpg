@@ -27,4 +27,8 @@ public EQUIPPED_ITEMS = this.API + '/getEquippedItems/';
   takeOffItem(id: String, char_id: String){
     return this.http.put(this.API + '/takeOffItem/' + id + '/' + char_id, id);
   }
+
+  getItemToEnchance(char_id: String, shard_id: String) {
+    return this.http.get(this.API + '/getItemToEnchance/' + char_id + '/' + shard_id);
+  }
 }

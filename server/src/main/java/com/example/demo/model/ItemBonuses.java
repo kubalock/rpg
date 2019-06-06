@@ -12,6 +12,20 @@ package com.example.demo.model;
 public class ItemBonuses {
 
     /**
+     * @return the endurance_percent
+     */
+    public Integer getEndurance_percent() {
+        return endurance_percent;
+    }
+
+    /**
+     * @param endurance_percent the endurance_percent to set
+     */
+    public void setEndurance_percent(Integer endurance_percent) {
+        this.endurance_percent = endurance_percent;
+    }
+
+    /**
      * @return the agility_percent
      */
     public Integer getAgility_percent() {
@@ -699,6 +713,7 @@ public class ItemBonuses {
     private Integer damage_fire = 0;
     private Integer damage_poison = 0;
     private Integer damage_percent = 0;
+    private Integer endurance_percent = 0;
     private Integer bleed_percent = 0;
     private Integer cold_percent = 0;
     private Integer electric_percent = 0;
@@ -919,6 +934,9 @@ public class ItemBonuses {
         if (base.getDmg_poison_percent() != null) {
             this.poison_percent = Math.round((int)(double) (this.poison_percent + (base.getDmg_poison_percent() * bonusMultiply)));
         }
+        if (base.getEndurance_percent() != null) {
+            this.endurance_percent = Math.round((int) (double) (this.endurance_percent + (base.getEndurance_percent() * bonusMultiply)));
+        }
         if (base.getHealth() != null) {
             this.health = Math.round((int)(double) (this.health + (base.getHealth() * bonusMultiply)));
         }
@@ -1094,6 +1112,7 @@ public class ItemBonuses {
         hero.setDef_ability_percent(hero.getDef_ability_percent() + this.def_ability_percent);
         hero.setDefense(hero.getDefense() + this.armor);
         hero.setDmg_percent(hero.getDmg_percent() + this.damage_percent);
+        hero.setEndurance_percent(hero.getEndurance_percent() + this.endurance_percent);
         hero.setElectric_percent(hero.getElectric_percent() + this.electric_percent);
         hero.setFire_percent(hero.getFire_percent() + this.fire_percent);
         hero.setHealth(hero.getHealth() + this.health);
