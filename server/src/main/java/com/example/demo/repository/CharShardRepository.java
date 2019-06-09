@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "http://localhost:4200")
 public interface CharShardRepository extends JpaRepository<CharShard, Long> {
     
-    @Query("select cs from CharShard cs where char_id = ?1")
+    @Query("select cs from CharShard cs where char_id = ?1 and assigned is null")
     Collection<CharShard> getCharShards(Long char_id);
+    
+    @Query("select cs from CharShard cs where char_id = ?1 and shard_id = ?2 and char_shards_id != ?3 and level < 5 and assigned is null")
+    Collection<CharShard> getShardToAssemble(Long char_id, Long shard_id, Long char_shard_id);
 }

@@ -26,7 +26,8 @@
                 <li *ngFor="let line of showItemDetails(item, 'armory', item.level)">
                   {{line}}
                   </li>
-                  <button mat-mini-button (click)="equip(item)">Equip</button> </ul>
+                  <button mat-mini-button (click)="equip(item)">Equip</button> <br>
+                  <button mat-mini-button (click)="sell(item)">Sell</button> </ul>
               </span>
       </div>
     </li>

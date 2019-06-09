@@ -12,6 +12,20 @@ package com.example.demo.model;
 public class ItemBonuses {
 
     /**
+     * @return the ignore_dmg
+     */
+    public Integer getIgnore_dmg() {
+        return ignore_dmg;
+    }
+
+    /**
+     * @param ignore_dmg the ignore_dmg to set
+     */
+    public void setIgnore_dmg(Integer ignore_dmg) {
+        this.ignore_dmg = ignore_dmg;
+    }
+
+    /**
      * @return the endurance_percent
      */
     public Integer getEndurance_percent() {
@@ -738,6 +752,7 @@ public class ItemBonuses {
     private Integer min_fire = 0;
     private Integer off_ability = 0;
     private Integer off_ability_percent = 0;
+    private Integer ignore_dmg = 0;
     private Integer res_bleed = 0;
     private Integer res_cold = 0;
     private Integer res_electric = 0;
@@ -752,9 +767,9 @@ public class ItemBonuses {
     public ItemBonuses getBonuses(Item item) {
         ItemBonuses bonuses = new ItemBonuses();
         double bonusMultiply = 1;
-        
-        if(item.getLevel() > 0) {
-            for(int i = 0; i < item.getLevel(); i++) {
+
+        if (item.getLevel() > 0) {
+            for (int i = 0; i < item.getLevel(); i++) {
                 bonusMultiply = bonusMultiply + 0.05;
             }
         }
@@ -762,340 +777,595 @@ public class ItemBonuses {
         if (item.getPrefix() != null) {
             Prefix prefix = item.getPrefix();
             if (prefix.getAgility_percent() != null) {
-                this.agility_percent = Math.round(Math.round((int)(double)(this.agility_percent + (bonusMultiply * prefix.getAgility_percent()))));
+                this.agility_percent = Math.round(Math.round((int) (double) (this.agility_percent + (bonusMultiply * prefix.getAgility_percent()))));
             }
             if (prefix.getArmor() != null) {
-                this.armor = Math.round((int)(double)(this.armor + (prefix.getArmor() * bonusMultiply)));
+                this.armor = Math.round((int) (double) (this.armor + (prefix.getArmor() * bonusMultiply)));
             }
             if (prefix.getAttack_speed() != null) {
-                this.attack_speed = Math.round((int)(double)(this.attack_speed + (prefix.getAttack_speed() * bonusMultiply)));
+                this.attack_speed = Math.round((int) (double) (this.attack_speed + (prefix.getAttack_speed() * bonusMultiply)));
             }
             if (prefix.getBlock_percent() != null) {
-                this.block_chance = Math.round((int)(double)(this.block_chance + (prefix.getBlock_percent() * bonusMultiply)));
+                this.block_chance = Math.round((int) (double) (this.block_chance + (prefix.getBlock_percent() * bonusMultiply)));
             }
             if (prefix.getDamage_cold() != null) {
-                this.damage_cold = Math.round((int)(double)(this.damage_cold + (prefix.getDamage_cold() * bonusMultiply)));
+                this.damage_cold = Math.round((int) (double) (this.damage_cold + (prefix.getDamage_cold() * bonusMultiply)));
             }
             if (prefix.getDamage_electric() != null) {
-                this.damage_electric = Math.round((int)(double)(this.damage_electric + (prefix.getDamage_electric() * bonusMultiply)));
+                this.damage_electric = Math.round((int) (double) (this.damage_electric + (prefix.getDamage_electric() * bonusMultiply)));
             }
             if (prefix.getDamage_fire() != null) {
-                this.damage_fire = Math.round((int)(double)(this.damage_fire + (prefix.getDamage_fire() * bonusMultiply)));
+                this.damage_fire = Math.round((int) (double) (this.damage_fire + (prefix.getDamage_fire() * bonusMultiply)));
             }
             if (prefix.getDamage_percent() != null) {
-                this.damage_percent = Math.round((int)(double)(this.damage_percent + (prefix.getDamage_percent() * bonusMultiply)));
+                this.damage_percent = Math.round((int) (double) (this.damage_percent + (prefix.getDamage_percent() * bonusMultiply)));
             }
             if (prefix.getDef_ability_percent() != null) {
-                this.def_ability_percent = Math.round((int)(double)(this.def_ability_percent + (prefix.getDef_ability_percent() * bonusMultiply)));
+                this.def_ability_percent = Math.round((int) (double) (this.def_ability_percent + (prefix.getDef_ability_percent() * bonusMultiply)));
             }
             if (prefix.getDmg_percent_bleed() != null) {
-                this.bleed_percent = Math.round((int)(double)(this.bleed_percent + (prefix.getDmg_percent_bleed() * bonusMultiply)));
+                this.bleed_percent = Math.round((int) (double) (this.bleed_percent + (prefix.getDmg_percent_bleed() * bonusMultiply)));
             }
             if (prefix.getDmg_percent_cold() != null) {
-                this.cold_percent = Math.round((int)(double)(this.cold_percent + (prefix.getDmg_percent_cold() * bonusMultiply)));
+                this.cold_percent = Math.round((int) (double) (this.cold_percent + (prefix.getDmg_percent_cold() * bonusMultiply)));
             }
             if (prefix.getDmg_percent_electric() != null) {
-                this.electric_percent = Math.round((int)(double)(this.electric_percent + (prefix.getDmg_percent_electric() * bonusMultiply)));
+                this.electric_percent = Math.round((int) (double) (this.electric_percent + (prefix.getDmg_percent_electric() * bonusMultiply)));
             }
             if (prefix.getDmg_percent_fire() != null) {
-                this.fire_percent = Math.round((int)(double)(this.fire_percent + (prefix.getDmg_percent_fire() * bonusMultiply)));
+                this.fire_percent = Math.round((int) (double) (this.fire_percent + (prefix.getDmg_percent_fire() * bonusMultiply)));
             }
             if (prefix.getHealth_percent() != null) {
-                this.health_percent = Math.round((int)(double)(this.health_percent + (prefix.getHealth_percent() * bonusMultiply)));
+                this.health_percent = Math.round((int) (double) (this.health_percent + (prefix.getHealth_percent() * bonusMultiply)));
             }
             if (prefix.getHealth_regen() != null) {
-                this.health_regen = Math.round((int)(double)(this.health_regen + (prefix.getHealth_regen() * bonusMultiply)));
+                this.health_regen = Math.round((int) (double) (this.health_regen + (prefix.getHealth_regen() * bonusMultiply)));
             }
             if (prefix.getIntelligence_percent() != null) {
-                this.intelligence_percent = Math.round((int)(double)(this.intelligence_percent + (prefix.getIntelligence_percent() * bonusMultiply)));
+                this.intelligence_percent = Math.round((int) (double) (this.intelligence_percent + (prefix.getIntelligence_percent() * bonusMultiply)));
             }
             if (prefix.getMax_bleed() != null) {
-                this.max_bleed = Math.round((int)(double)(this.max_bleed + (prefix.getMax_bleed() * bonusMultiply)));
+                this.max_bleed = Math.round((int) (double) (this.max_bleed + (prefix.getMax_bleed() * bonusMultiply)));
             }
             if (prefix.getMin_bleed() != null) {
-                this.min_bleed = Math.round((int)(double)(this.min_bleed + (prefix.getMin_bleed() * bonusMultiply)));
+                this.min_bleed = Math.round((int) (double) (this.min_bleed + (prefix.getMin_bleed() * bonusMultiply)));
             }
             if (prefix.getMax_cold() != null) {
-                this.max_cold = Math.round((int)(double)(this.max_cold + (prefix.getMax_cold() * bonusMultiply)));
+                this.max_cold = Math.round((int) (double) (this.max_cold + (prefix.getMax_cold() * bonusMultiply)));
             }
             if (prefix.getMin_cold() != null) {
-                this.min_cold = Math.round((int)(double)(this.min_cold + (prefix.getMin_cold() * bonusMultiply)));
+                this.min_cold = Math.round((int) (double) (this.min_cold + (prefix.getMin_cold() * bonusMultiply)));
             }
             if (prefix.getMax_damage() != null) {
-                this.max_damage = Math.round((int)(double)(this.max_damage + (prefix.getMax_damage() * bonusMultiply)));
+                this.max_damage = Math.round((int) (double) (this.max_damage + (prefix.getMax_damage() * bonusMultiply)));
             }
             if (prefix.getMin_damage() != null) {
-                this.min_damage = Math.round((int)(double)(this.min_damage + (prefix.getMin_damage() * bonusMultiply)));
+                this.min_damage = Math.round((int) (double) (this.min_damage + (prefix.getMin_damage() * bonusMultiply)));
             }
             if (prefix.getMax_electric() != null) {
-                this.max_electric = Math.round((int)(double)(this.max_electric + (prefix.getMax_electric() * bonusMultiply)));
+                this.max_electric = Math.round((int) (double) (this.max_electric + (prefix.getMax_electric() * bonusMultiply)));
             }
             if (prefix.getMin_electric() != null) {
-                this.min_electric = Math.round((int)(double)(this.min_electric + (prefix.getMin_electric() * bonusMultiply)));
+                this.min_electric = Math.round((int) (double) (this.min_electric + (prefix.getMin_electric() * bonusMultiply)));
             }
             if (prefix.getMax_fire() != null) {
-                this.max_fire = Math.round((int)(double)(this.max_fire + (prefix.getMax_fire() * bonusMultiply)));
+                this.max_fire = Math.round((int) (double) (this.max_fire + (prefix.getMax_fire() * bonusMultiply)));
             }
             if (prefix.getMin_fire() != null) {
-                this.min_fire = Math.round((int)(double)(this.min_fire + (prefix.getMin_fire() * bonusMultiply)));
+                this.min_fire = Math.round((int) (double) (this.min_fire + (prefix.getMin_fire() * bonusMultiply)));
             }
             if (prefix.getMin_poison() != null) {
-                this.min_poison = Math.round((int)(double)(this.min_poison + (prefix.getMin_poison() * bonusMultiply)));
+                this.min_poison = Math.round((int) (double) (this.min_poison + (prefix.getMin_poison() * bonusMultiply)));
             }
             if (prefix.getMax_poison() != null) {
-                this.max_poison = Math.round((int)(double)(this.max_poison + (prefix.getMax_poison() * bonusMultiply)));
+                this.max_poison = Math.round((int) (double) (this.max_poison + (prefix.getMax_poison() * bonusMultiply)));
             }
             if (prefix.getOff_ability() != null) {
-                this.off_ability = Math.round((int)(double)(this.off_ability + (prefix.getOff_ability() * bonusMultiply)));
+                this.off_ability = Math.round((int) (double) (this.off_ability + (prefix.getOff_ability() * bonusMultiply)));
             }
             if (prefix.getOff_ability_percent() != null) {
-                this.off_ability_percent = Math.round((int)(double)(this.off_ability_percent + (prefix.getOff_ability_percent() * bonusMultiply)));
+                this.off_ability_percent = Math.round((int) (double) (this.off_ability_percent + (prefix.getOff_ability_percent() * bonusMultiply)));
             }
             if (prefix.getRes_bleed() != null) {
-                this.res_bleed = Math.round((int)(double)(this.res_bleed + (prefix.getRes_bleed() * bonusMultiply)));
+                this.res_bleed = Math.round((int) (double) (this.res_bleed + (prefix.getRes_bleed() * bonusMultiply)));
             }
             if (prefix.getRes_cold() != null) {
-                this.res_cold = Math.round((int)(double)(this.res_cold + (prefix.getRes_cold() * bonusMultiply)));
+                this.res_cold = Math.round((int) (double) (this.res_cold + (prefix.getRes_cold() * bonusMultiply)));
             }
             if (prefix.getRes_electric() != null) {
-                this.res_electric = Math.round((int)(double)(this.res_electric + (prefix.getRes_electric() * bonusMultiply)));
+                this.res_electric = Math.round((int) (double) (this.res_electric + (prefix.getRes_electric() * bonusMultiply)));
             }
             if (prefix.getRes_fire() != null) {
-                this.res_fire = Math.round((int)(double)(this.res_fire + (prefix.getRes_fire() * bonusMultiply)));
+                this.res_fire = Math.round((int) (double) (this.res_fire + (prefix.getRes_fire() * bonusMultiply)));
             }
             if (prefix.getRes_poison() != null) {
-                this.res_poison = Math.round((int)(double)(this.res_poison + (prefix.getRes_poison() * bonusMultiply)));
+                this.res_poison = Math.round((int) (double) (this.res_poison + (prefix.getRes_poison() * bonusMultiply)));
             }
             if (prefix.getRes_stun() != null) {
-                this.res_stun = Math.round((int)(double)(this.res_stun + (prefix.getRes_stun() * bonusMultiply)));
+                this.res_stun = Math.round((int) (double) (this.res_stun + (prefix.getRes_stun() * bonusMultiply)));
             }
             if (prefix.getSlow() != null) {
-                this.slow = Math.round((int)(double)(this.slow + (prefix.getSlow() * bonusMultiply)));
+                this.slow = Math.round((int) (double) (this.slow + (prefix.getSlow() * bonusMultiply)));
             }
             if (prefix.getStrength() != null) {
-                this.strength = Math.round((int)(double)(this.strength + (prefix.getStrength() * bonusMultiply)));
+                this.strength = Math.round((int) (double) (this.strength + (prefix.getStrength() * bonusMultiply)));
             }
             if (prefix.getStrength_percent() != null) {
-                this.strength_percent = Math.round((int)(double)(this.strength_percent + (prefix.getStrength_percent() * bonusMultiply)));
+                this.strength_percent = Math.round((int) (double) (this.strength_percent + (prefix.getStrength_percent() * bonusMultiply)));
             }
         }
         ItemBase base = item.getItemBase();
         if (base.getAgility() != null) {
-            this.agility = Math.round((int)(double) (this.agility + (base.getAgility() * bonusMultiply)));
+            this.agility = Math.round((int) (double) (this.agility + (base.getAgility() * bonusMultiply)));
         }
         if (base.getAgility_percent() != null) {
-            this.agility_percent = Math.round((int)(double) (this.agility_percent + (base.getAgility_percent() * bonusMultiply)));
+            this.agility_percent = Math.round((int) (double) (this.agility_percent + (base.getAgility_percent() * bonusMultiply)));
         }
         if (base.getArmor() != null) {
-            this.armor = Math.round((int)(double) (this.armor + (base.getArmor() * bonusMultiply)));
+            this.armor = Math.round((int) (double) (this.armor + (base.getArmor() * bonusMultiply)));
         }
         if (base.getAttack_speed() != null) {
-            this.attack_speed = Math.round((int)(double) (this.attack_speed + (base.getAttack_speed() * bonusMultiply)));
+            this.attack_speed = Math.round((int) (double) (this.attack_speed + (base.getAttack_speed() * bonusMultiply)));
         }
         if (base.getBlock_chance() != null) {
-            this.block_chance = Math.round((int)(double) (this.block_chance + (base.getBlock_chance() * bonusMultiply)));
+            this.block_chance = Math.round((int) (double) (this.block_chance + (base.getBlock_chance() * bonusMultiply)));
         }
         if (base.getBlock_damage() != null) {
-            this.block = Math.round((int)(double) (this.block + (base.getBlock_damage() * bonusMultiply)));
+            this.block = Math.round((int) (double) (this.block + (base.getBlock_damage() * bonusMultiply)));
         }
         if (base.getDamage_cold() != null) {
-            this.damage_cold = Math.round((int)(double) (this.damage_cold + (base.getDamage_cold() * bonusMultiply)));
+            this.damage_cold = Math.round((int) (double) (this.damage_cold + (base.getDamage_cold() * bonusMultiply)));
         }
         if (base.getDamage_electric() != null) {
-            this.damage_electric = Math.round((int)(double) (this.damage_electric + (base.getDamage_electric() * bonusMultiply)));
+            this.damage_electric = Math.round((int) (double) (this.damage_electric + (base.getDamage_electric() * bonusMultiply)));
         }
         if (base.getDamage_fire() != null) {
-            this.damage_fire = Math.round((int)(double) (this.damage_fire + (base.getDamage_fire() * bonusMultiply)));
+            this.damage_fire = Math.round((int) (double) (this.damage_fire + (base.getDamage_fire() * bonusMultiply)));
         }
         if (base.getDamage_bleed() != null) {
-            this.damage_bleed = Math.round((int)(double) (this.damage_bleed + (base.getDamage_bleed() * bonusMultiply)));
+            this.damage_bleed = Math.round((int) (double) (this.damage_bleed + (base.getDamage_bleed() * bonusMultiply)));
         }
         if (base.getDamage_poison() != null) {
-            this.damage_poison = Math.round((int)(double) (this.damage_poison + (base.getDamage_poison() * bonusMultiply)));
+            this.damage_poison = Math.round((int) (double) (this.damage_poison + (base.getDamage_poison() * bonusMultiply)));
         }
         if (base.getDef_ability() != null) {
-            this.def_ability = Math.round((int)(double) (this.def_ability + (base.getDef_ability() * bonusMultiply)));
+            this.def_ability = Math.round((int) (double) (this.def_ability + (base.getDef_ability() * bonusMultiply)));
         }
         if (base.getDmg_percent() != null) {
-            this.damage_percent = Math.round((int)(double) (this.damage_percent + (base.getDmg_percent() * bonusMultiply)));
+            this.damage_percent = Math.round((int) (double) (this.damage_percent + (base.getDmg_percent() * bonusMultiply)));
         }
         if (base.getDmg_bleed_percent() != null) {
-            this.bleed_percent = Math.round((int)(double) (this.bleed_percent + (base.getDmg_bleed_percent() * bonusMultiply)));
+            this.bleed_percent = Math.round((int) (double) (this.bleed_percent + (base.getDmg_bleed_percent() * bonusMultiply)));
         }
         if (base.getDmg_cold_percent() != null) {
-            this.cold_percent = Math.round((int)(double) (this.cold_percent + (base.getDmg_cold_percent() * bonusMultiply)));
+            this.cold_percent = Math.round((int) (double) (this.cold_percent + (base.getDmg_cold_percent() * bonusMultiply)));
         }
         if (base.getDmg_electric_percent() != null) {
-            this.electric_percent = Math.round((int)(double) (this.electric_percent + (base.getDmg_electric_percent() * bonusMultiply)));
+            this.electric_percent = Math.round((int) (double) (this.electric_percent + (base.getDmg_electric_percent() * bonusMultiply)));
         }
         if (base.getDmg_fire_percent() != null) {
-            this.fire_percent = Math.round((int)(double) (this.fire_percent + (base.getDmg_fire_percent() * bonusMultiply)));
+            this.fire_percent = Math.round((int) (double) (this.fire_percent + (base.getDmg_fire_percent() * bonusMultiply)));
         }
         if (base.getDmg_poison_percent() != null) {
-            this.poison_percent = Math.round((int)(double) (this.poison_percent + (base.getDmg_poison_percent() * bonusMultiply)));
+            this.poison_percent = Math.round((int) (double) (this.poison_percent + (base.getDmg_poison_percent() * bonusMultiply)));
         }
         if (base.getEndurance_percent() != null) {
             this.endurance_percent = Math.round((int) (double) (this.endurance_percent + (base.getEndurance_percent() * bonusMultiply)));
         }
         if (base.getHealth() != null) {
-            this.health = Math.round((int)(double) (this.health + (base.getHealth() * bonusMultiply)));
+            this.health = Math.round((int) (double) (this.health + (base.getHealth() * bonusMultiply)));
         }
         if (base.getHealth_percent() != null) {
-            this.health_percent = Math.round((int)(double) (this.health_percent + (base.getHealth_percent() * bonusMultiply)));
+            this.health_percent = Math.round((int) (double) (this.health_percent + (base.getHealth_percent() * bonusMultiply)));
         }
         if (base.getHealth_regen() != null) {
-            this.health_regen = Math.round((int)(double) (this.health_regen + (base.getHealth_regen() * bonusMultiply)));
+            this.health_regen = Math.round((int) (double) (this.health_regen + (base.getHealth_regen() * bonusMultiply)));
         }
         if (base.getIntelligence() != null) {
-            this.intelligence = Math.round((int)(double) (this.intelligence + (base.getIntelligence() * bonusMultiply)));
+            this.intelligence = Math.round((int) (double) (this.intelligence + (base.getIntelligence() * bonusMultiply)));
         }
         if (base.getIntelligence_percent() != null) {
-            this.intelligence_percent = Math.round((int)(double) (this.intelligence_percent + (base.getIntelligence_percent() * bonusMultiply)));
+            this.intelligence_percent = Math.round((int) (double) (this.intelligence_percent + (base.getIntelligence_percent() * bonusMultiply)));
         }
         if (base.getMax_cold() != null) {
-            this.max_cold = Math.round((int)(double) (this.max_cold + (base.getMax_cold() * bonusMultiply)));
+            this.max_cold = Math.round((int) (double) (this.max_cold + (base.getMax_cold() * bonusMultiply)));
         }
         if (base.getMin_cold() != null) {
-            this.min_cold = Math.round((int)(double) (this.min_cold + (base.getMin_cold() * bonusMultiply)));
+            this.min_cold = Math.round((int) (double) (this.min_cold + (base.getMin_cold() * bonusMultiply)));
         }
         if (base.getMax_damage() != null) {
-            this.max_damage = Math.round((int)(double) (this.max_damage + (base.getMax_damage() * bonusMultiply)));
+            this.max_damage = Math.round((int) (double) (this.max_damage + (base.getMax_damage() * bonusMultiply)));
         }
         if (base.getMin_damage() != null) {
-            this.min_damage = Math.round((int)(double) (this.min_damage + (base.getMin_damage() * bonusMultiply)));
+            this.min_damage = Math.round((int) (double) (this.min_damage + (base.getMin_damage() * bonusMultiply)));
         }
         if (base.getMax_electric() != null) {
-            this.max_electric = Math.round((int)(double) (this.max_electric + (base.getMax_electric() * bonusMultiply)));
+            this.max_electric = Math.round((int) (double) (this.max_electric + (base.getMax_electric() * bonusMultiply)));
         }
         if (base.getMin_electric() != null) {
-            this.min_electric = Math.round((int)(double) (this.min_electric + (base.getMin_electric() * bonusMultiply)));
+            this.min_electric = Math.round((int) (double) (this.min_electric + (base.getMin_electric() * bonusMultiply)));
         }
         if (base.getMax_fire() != null) {
-            this.max_fire = Math.round((int)(double) (this.max_fire + (base.getMax_fire() * bonusMultiply)));
+            this.max_fire = Math.round((int) (double) (this.max_fire + (base.getMax_fire() * bonusMultiply)));
         }
         if (base.getMin_fire() != null) {
-            this.min_fire = Math.round((int)(double) (this.min_fire + (base.getMin_fire() * bonusMultiply)));
+            this.min_fire = Math.round((int) (double) (this.min_fire + (base.getMin_fire() * bonusMultiply)));
         }
         if (base.getOff_ability() != null) {
-            this.off_ability = Math.round((int)(double) (this.off_ability + (base.getOff_ability() * bonusMultiply)));
+            this.off_ability = Math.round((int) (double) (this.off_ability + (base.getOff_ability() * bonusMultiply)));
         }
         if (base.getRes_bleed() != null) {
-            this.res_bleed = Math.round((int)(double) (this.res_bleed + (base.getRes_bleed() * bonusMultiply)));
+            this.res_bleed = Math.round((int) (double) (this.res_bleed + (base.getRes_bleed() * bonusMultiply)));
         }
         if (base.getRes_cold() != null) {
-            this.res_cold = Math.round((int)(double) (this.res_cold + (base.getRes_cold() * bonusMultiply)));
+            this.res_cold = Math.round((int) (double) (this.res_cold + (base.getRes_cold() * bonusMultiply)));
         }
         if (base.getRes_electric() != null) {
-            this.res_electric = Math.round((int)(double) (this.res_electric + (base.getRes_electric() * bonusMultiply)));
+            this.res_electric = Math.round((int) (double) (this.res_electric + (base.getRes_electric() * bonusMultiply)));
         }
         if (base.getRes_fire() != null) {
-            this.res_fire = Math.round((int)(double) (this.res_fire + (base.getRes_fire() * bonusMultiply)));
+            this.res_fire = Math.round((int) (double) (this.res_fire + (base.getRes_fire() * bonusMultiply)));
         }
         if (base.getRes_poison() != null) {
-            this.res_poison = Math.round((int)(double) (this.res_poison + (base.getRes_poison() * bonusMultiply)));
+            this.res_poison = Math.round((int) (double) (this.res_poison + (base.getRes_poison() * bonusMultiply)));
         }
         if (base.getRes_stun() != null) {
-            this.res_stun = Math.round((int)(double) (this.res_stun + (base.getRes_stun() * bonusMultiply)));
+            this.res_stun = Math.round((int) (double) (this.res_stun + (base.getRes_stun() * bonusMultiply)));
         }
         if (base.getStrength() != null) {
-            this.strength = Math.round((int)(double) (this.strength + (base.getStrength() * bonusMultiply)));
+            this.strength = Math.round((int) (double) (this.strength + (base.getStrength() * bonusMultiply)));
         }
         if (base.getStrength_percent() != null) {
-            this.strength_percent = Math.round((int)(double) (this.strength_percent + (base.getStrength_percent() * bonusMultiply)));
+            this.strength_percent = Math.round((int) (double) (this.strength_percent + (base.getStrength_percent() * bonusMultiply)));
         }
         if (base.getStun_chance() != null) {
-            this.stun_chance = Math.round((int)(double) (this.stun_chance + (base.getStun_chance() * bonusMultiply)));
+            this.stun_chance = Math.round((int) (double) (this.stun_chance + (base.getStun_chance() * bonusMultiply)));
         }
         if (item.getSuffix() != null) {
             Suffix suffix = item.getSuffix();
             if (suffix.getAgility() != null) {
-                this.agility = Math.round((int)(double) (this.agility + (suffix.getAgility() * bonusMultiply)));
+                this.agility = Math.round((int) (double) (this.agility + (suffix.getAgility() * bonusMultiply)));
             }
             if (suffix.getAgility_percent() != null) {
-                this.agility_percent = Math.round((int)(double) (this.agility_percent + (suffix.getAgility_percent() * bonusMultiply)));
+                this.agility_percent = Math.round((int) (double) (this.agility_percent + (suffix.getAgility_percent() * bonusMultiply)));
             }
             if (suffix.getAgility() != null) {
-                this.agility = Math.round((int)(double) (this.agility + (suffix.getAgility() * bonusMultiply)));
+                this.agility = Math.round((int) (double) (this.agility + (suffix.getAgility() * bonusMultiply)));
             }
             if (suffix.getAttack_speed() != null) {
-                this.attack_speed = Math.round((int)(double) (this.attack_speed + (suffix.getAttack_speed() * bonusMultiply)));
+                this.attack_speed = Math.round((int) (double) (this.attack_speed + (suffix.getAttack_speed() * bonusMultiply)));
             }
             if (suffix.getDamage_cold() != null) {
-                this.damage_cold = Math.round((int)(double) (this.damage_cold + (suffix.getDamage_cold() * bonusMultiply)));
+                this.damage_cold = Math.round((int) (double) (this.damage_cold + (suffix.getDamage_cold() * bonusMultiply)));
             }
             if (suffix.getDamage_electric() != null) {
-                this.damage_electric = Math.round((int)(double) (this.damage_electric + (suffix.getDamage_electric() * bonusMultiply)));
+                this.damage_electric = Math.round((int) (double) (this.damage_electric + (suffix.getDamage_electric() * bonusMultiply)));
             }
             if (suffix.getDamage_fire() != null) {
-                this.damage_fire = Math.round((int)(double) (this.damage_fire + (suffix.getDamage_fire() * bonusMultiply)));
+                this.damage_fire = Math.round((int) (double) (this.damage_fire + (suffix.getDamage_fire() * bonusMultiply)));
             }
             if (suffix.getDamage() != null) {
-                this.damage = Math.round((int)(double) (this.damage + (suffix.getDamage() * bonusMultiply)));
+                this.damage = Math.round((int) (double) (this.damage + (suffix.getDamage() * bonusMultiply)));
             }
             if (suffix.getDef_ability() != null) {
-                this.def_ability = Math.round((int)(double) (this.def_ability + (suffix.getDef_ability() * bonusMultiply)));
+                this.def_ability = Math.round((int) (double) (this.def_ability + (suffix.getDef_ability() * bonusMultiply)));
             }
             if (suffix.getDmg_percent_bleed() != null) {
-                this.bleed_percent = Math.round((int)(double) (this.bleed_percent + (suffix.getDmg_percent_bleed() * bonusMultiply)));
+                this.bleed_percent = Math.round((int) (double) (this.bleed_percent + (suffix.getDmg_percent_bleed() * bonusMultiply)));
             }
             if (suffix.getDmg_percent_cold() != null) {
-                this.cold_percent = Math.round((int)(double) (this.cold_percent + (suffix.getDmg_percent_cold() * bonusMultiply)));
+                this.cold_percent = Math.round((int) (double) (this.cold_percent + (suffix.getDmg_percent_cold() * bonusMultiply)));
             }
             if (suffix.getDmg_percent_electric() != null) {
-                this.electric_percent = Math.round((int)(double) (this.electric_percent + (suffix.getDmg_percent_electric() * bonusMultiply)));
+                this.electric_percent = Math.round((int) (double) (this.electric_percent + (suffix.getDmg_percent_electric() * bonusMultiply)));
             }
             if (suffix.getDmg_percent_fire() != null) {
-                this.fire_percent = Math.round((int)(double) (this.fire_percent + (suffix.getDmg_percent_fire() * bonusMultiply)));
+                this.fire_percent = Math.round((int) (double) (this.fire_percent + (suffix.getDmg_percent_fire() * bonusMultiply)));
             }
             if (suffix.getDmg_percent_poison() != null) {
-                this.damage_percent = Math.round((int)(double) (this.damage_percent + (suffix.getDmg_percent_poison() * bonusMultiply)));
+                this.damage_percent = Math.round((int) (double) (this.damage_percent + (suffix.getDmg_percent_poison() * bonusMultiply)));
             }
             if (suffix.getHealth() != null) {
-                this.health = Math.round((int)(double) (this.health + (suffix.getHealth() * bonusMultiply)));
+                this.health = Math.round((int) (double) (this.health + (suffix.getHealth() * bonusMultiply)));
             }
             if (suffix.getHealth_percent() != null) {
-                this.health_percent = Math.round((int)(double) (this.health_percent + (suffix.getHealth_percent() * bonusMultiply)));
+                this.health_percent = Math.round((int) (double) (this.health_percent + (suffix.getHealth_percent() * bonusMultiply)));
             }
             if (suffix.getHealth_regen() != null) {
-                this.health_regen = Math.round((int)(double) (this.health_regen + (suffix.getHealth_regen() * bonusMultiply)));
+                this.health_regen = Math.round((int) (double) (this.health_regen + (suffix.getHealth_regen() * bonusMultiply)));
             }
             if (suffix.getIntelligence() != null) {
-                this.intelligence = Math.round((int)(double) (this.intelligence + (suffix.getIntelligence() * bonusMultiply)));
+                this.intelligence = Math.round((int) (double) (this.intelligence + (suffix.getIntelligence() * bonusMultiply)));
             }
             if (suffix.getIntelligence_percent() != null) {
-                this.intelligence_percent = Math.round((int)(double) (this.intelligence_percent + (suffix.getIntelligence_percent() * bonusMultiply)));
+                this.intelligence_percent = Math.round((int) (double) (this.intelligence_percent + (suffix.getIntelligence_percent() * bonusMultiply)));
             }
             if (suffix.getOff_ability() != null) {
-                this.off_ability = Math.round((int)(double) (this.off_ability + (suffix.getOff_ability() * bonusMultiply)));
+                this.off_ability = Math.round((int) (double) (this.off_ability + (suffix.getOff_ability() * bonusMultiply)));
             }
             if (suffix.getRes_bleed() != null) {
-                this.res_bleed = Math.round((int)(double) (this.res_bleed + (suffix.getRes_bleed() * bonusMultiply)));
+                this.res_bleed = Math.round((int) (double) (this.res_bleed + (suffix.getRes_bleed() * bonusMultiply)));
             }
             if (suffix.getRes_cold() != null) {
-                this.res_cold = Math.round((int)(double) (this.res_cold + (suffix.getRes_cold() * bonusMultiply)));
+                this.res_cold = Math.round((int) (double) (this.res_cold + (suffix.getRes_cold() * bonusMultiply)));
             }
             if (suffix.getRes_electric() != null) {
-                this.res_electric = Math.round((int)(double) (this.res_electric + (suffix.getRes_electric() * bonusMultiply)));
+                this.res_electric = Math.round((int) (double) (this.res_electric + (suffix.getRes_electric() * bonusMultiply)));
             }
             if (suffix.getRes_fire() != null) {
-                this.res_fire = Math.round((int)(double) (this.res_fire + (suffix.getRes_fire() * bonusMultiply)));
+                this.res_fire = Math.round((int) (double) (this.res_fire + (suffix.getRes_fire() * bonusMultiply)));
             }
             if (suffix.getRes_stun() != null) {
-                this.res_stun = Math.round((int)(double) (this.res_stun + (suffix.getRes_stun() * bonusMultiply)));
+                this.res_stun = Math.round((int) (double) (this.res_stun + (suffix.getRes_stun() * bonusMultiply)));
             }
             if (suffix.getStrength() != null) {
-                this.strength = Math.round((int)(double) (this.strength + (suffix.getStrength() * bonusMultiply)));
+                this.strength = Math.round((int) (double) (this.strength + (suffix.getStrength() * bonusMultiply)));
             }
             if (suffix.getStrength_percent() != null) {
-                this.strength_percent = Math.round((int)(double) (this.strength_percent + (suffix.getStrength_percent() * bonusMultiply)));
+                this.strength_percent = Math.round((int) (double) (this.strength_percent + (suffix.getStrength_percent() * bonusMultiply)));
             }
             if (suffix.getStun_chance() != null) {
-                this.stun_chance = Math.round((int)(double) (this.stun_chance + (suffix.getStun_chance() * bonusMultiply)));
+                this.stun_chance = Math.round((int) (double) (this.stun_chance + (suffix.getStun_chance() * bonusMultiply)));
             }
             if (suffix.getSlow() != null) {
-                this.slow = Math.round((int)(double) (this.slow + (suffix.getSlow() * bonusMultiply)));
+                this.slow = Math.round((int) (double) (this.slow + (suffix.getSlow() * bonusMultiply)));
             }
         }
+        if (item.getShard_id() != null) {
+            if (item.getShard_id().getShard().getArmor() != null) {
+                this.armor = this.armor + item.getShard_id().getShard().getArmor() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getAgility() != null) {
+                this.agility = this.agility + item.getShard_id().getShard().getAgility() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getAgility_percent() != null) {
+                this.agility_percent = this.agility_percent + item.getShard_id().getShard().getAgility_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getAttack_speed() != null) {
+                this.attack_speed = this.attack_speed + item.getShard_id().getShard().getAttack_speed() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getBlock_chance() != null) {
+                this.block_chance = this.block_chance + item.getShard_id().getShard().getBlock_chance() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getBlock_damage() != null) {
+                this.block = this.block + item.getShard_id().getShard().getBlock_damage() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDef_ability() != null) {
+                this.def_ability = this.def_ability + item.getShard_id().getShard().getDef_ability() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg() != null) {
+                this.min_damage = this.min_damage + item.getShard_id().getShard().getDmg() * item.getShard_id().getLevel();
+                this.max_damage = this.max_damage + item.getShard_id().getShard().getDmg() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_bleed() != null) {
+                this.min_bleed = this.min_bleed + item.getShard_id().getShard().getDmg_bleed() * item.getShard_id().getLevel();
+                this.max_bleed = this.max_bleed + item.getShard_id().getShard().getDmg_bleed() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_bleed_percent() != null) {
+                this.bleed_percent = this.bleed_percent + item.getShard_id().getShard().getDmg_bleed_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_cold() != null) {
+                this.min_cold = this.min_cold + item.getShard_id().getShard().getDmg_cold() * item.getShard_id().getLevel();
+                this.max_cold = this.max_cold + item.getShard_id().getShard().getDmg_cold() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_cold_percent() != null) {
+                this.cold_percent = this.cold_percent + item.getShard_id().getShard().getDmg_cold_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_electric() != null) {
+                this.min_electric = this.min_electric + item.getShard_id().getShard().getDmg_electric() * item.getShard_id().getLevel();
+                this.max_electric = this.max_electric + item.getShard_id().getShard().getDmg_electric() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_electric_percent() != null) {
+                this.electric_percent = this.electric_percent + item.getShard_id().getShard().getDmg_electric_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_fire() != null) {
+                this.min_fire = this.min_fire + item.getShard_id().getShard().getDmg_fire() * item.getShard_id().getLevel();
+                this.max_fire = this.max_fire + item.getShard_id().getShard().getDmg_fire() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_fire_percent() != null) {
+                this.fire_percent = this.fire_percent + item.getShard_id().getShard().getDmg_fire_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_poison() != null) {
+                this.min_poison = this.min_poison + item.getShard_id().getShard().getDmg_poison() * item.getShard_id().getLevel();
+                this.max_poison = this.max_poison + item.getShard_id().getShard().getDmg_poison() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getMin_fire() != null) {
+                this.min_fire = this.min_fire + item.getShard_id().getShard().getMin_fire() * item.getShard_id().getLevel();
+                this.max_fire = this.max_fire + item.getShard_id().getShard().getMax_fire() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_poison_percent() != null) {
+                this.poison_percent = this.poison_percent + item.getShard_id().getShard().getDmg_poison_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getDmg_percent() != null) {
+                this.damage_percent = this.damage_percent + item.getShard_id().getShard().getDmg_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getEndurance_percent() != null) {
+                this.endurance_percent = this.endurance_percent + item.getShard_id().getShard().getEndurance_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getHealth() != null) {
+                this.health = this.health + item.getShard_id().getShard().getHealth() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getHealth_percent() != null) {
+                this.health_percent = this.health_percent + item.getShard_id().getShard().getHealth_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getHealth_regen() != null) {
+                this.health_regen = this.health_regen + item.getShard_id().getShard().getHealth_regen() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getMin_dmg() != null) {
+                this.min_damage = this.min_damage + item.getShard_id().getShard().getMin_dmg() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getMax_dmg() != null) {
+                this.max_damage = this.max_damage + item.getShard_id().getShard().getMax_dmg() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getOff_ability() != null) {
+                this.off_ability = this.off_ability + item.getShard_id().getShard().getOff_ability() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getIgnore_dmg() != null) {
+                this.ignore_dmg = this.ignore_dmg + item.getShard_id().getShard().getIgnore_dmg() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getIntelligence() != null) {
+                this.intelligence = this.intelligence + item.getShard_id().getShard().getIntelligence() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getIntelligence_percent() != null) {
+                this.intelligence_percent = this.intelligence_percent + item.getShard_id().getShard().getIntelligence_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getRes_bleed() != null) {
+                this.res_bleed = this.res_bleed + item.getShard_id().getShard().getRes_bleed() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getRes_cold() != null) {
+                this.res_cold = this.res_cold + item.getShard_id().getShard().getRes_cold() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getRes_electric() != null) {
+                this.res_electric = this.res_electric + item.getShard_id().getShard().getRes_electric() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getRes_fire() != null) {
+                this.res_fire = this.res_fire + item.getShard_id().getShard().getRes_fire() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getRes_stun() != null) {
+                this.res_stun = this.res_stun + item.getShard_id().getShard().getRes_stun() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getRes_poison() != null) {
+                this.res_poison = this.res_poison + item.getShard_id().getShard().getRes_poison() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getSlow() != null) {
+                this.slow = this.slow + item.getShard_id().getShard().getSlow() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getStrength() != null) {
+                this.strength = this.strength + item.getShard_id().getShard().getStrength() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getStrength_percent() != null) {
+                this.strength_percent = this.strength_percent + item.getShard_id().getShard().getStrength_percent() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getShard().getStun_chance() != null) {
+                this.stun_chance = this.stun_chance + item.getShard_id().getShard().getStun_chance() * item.getShard_id().getLevel();
+            }
+            if (item.getShard_id().getLevel() == 5) {
+                if (item.getShard_id().getAgility() != null) {
+                    this.agility = this.agility + item.getShard_id().getAgility();
+                }
+                if (item.getShard_id().getArmor() != null) {
+                    this.armor = this.armor + item.getShard_id().getArmor();
+                }
+                if (item.getShard_id().getAttack_speed() != null) {
+                    this.attack_speed = this.attack_speed + item.getShard_id().getAttack_speed();
+                }
+                if (item.getShard_id().getDef_ability() != null) {
+                    this.def_ability = this.def_ability + item.getShard_id().getDef_ability();
+                }
+                if (item.getShard_id().getDmg_bleed() != null) {
+                    this.min_bleed = this.min_bleed + item.getShard_id().getDmg_bleed();
+                    this.max_bleed = this.max_bleed + item.getShard_id().getDmg_bleed();
+                }
+                if (item.getShard_id().getDmg_bleed_percent() != null) {
+                    this.bleed_percent = this.bleed_percent + item.getShard_id().getDmg_bleed_percent();
+                }
+                if (item.getShard_id().getDmg_cold() != null) {
+                    this.min_cold = this.min_cold + item.getShard_id().getDmg_cold();
+                    this.max_cold = this.max_cold + item.getShard_id().getDmg_cold();
+                }
+                if (item.getShard_id().getDmg_cold_percent() != null) {
+                    this.cold_percent = this.cold_percent + item.getShard_id().getDmg_cold_percent();
+                }
+                if (item.getShard_id().getDmg_elemental() != null) {
+                    this.min_fire = this.min_fire + item.getShard_id().getDmg_elemental();
+                    this.max_fire = this.max_fire + item.getShard_id().getDmg_elemental();
+                    this.min_cold = this.min_cold + item.getShard_id().getDmg_elemental();
+                    this.max_cold = this.max_cold + item.getShard_id().getDmg_elemental();
+                    this.min_electric = this.min_electric + item.getShard_id().getDmg_elemental();
+                    this.max_electric = this.max_electric + item.getShard_id().getDmg_elemental();
+                }
+                if (item.getShard_id().getDmg_fire() != null) {
+                    this.min_fire = this.min_fire + item.getShard_id().getDmg_fire();
+                    this.max_fire = this.max_fire + item.getShard_id().getDmg_fire();
+                }
+                if (item.getShard_id().getDmg_electric_percent() != null) {
+                    this.electric_percent = this.electric_percent + item.getShard_id().getDmg_electric_percent();
+                }
+                if (item.getShard_id().getDmg_fire_percent() != null) {
+                    this.fire_percent = this.fire_percent + item.getShard_id().getDmg_fire_percent();
+                }
+                if (item.getShard_id().getDmg_poison() != null) {
+                    this.min_poison = this.min_poison + item.getShard_id().getDmg_poison();
+                    this.max_poison = this.max_poison + item.getShard_id().getDmg_poison();
+                }
+                if (item.getShard_id().getDmg_poison_percent() != null) {
+                    this.poison_percent = this.poison_percent + item.getShard_id().getDmg_poison_percent();
+                }
+                if (item.getShard_id().getDmg_percent() != null) {
+                    this.damage_percent = this.damage_percent + item.getShard_id().getDmg_percent();
+                }
+                if (item.getShard_id().getHealth() != null) {
+                    this.health = this.health + item.getShard_id().getHealth();
+                }
+                if (item.getShard_id().getHealth_regen() != null) {
+                    this.health_regen = this.health_regen + item.getShard_id().getHealth_regen();
+                }
+                if (item.getShard_id().getIntelligence() != null) {
+                    this.intelligence = this.intelligence + item.getShard_id().getIntelligence();
+                }
+                if (item.getShard_id().getIntelligence_percent() != null) {
+                    this.intelligence_percent = this.intelligence_percent + item.getShard_id().getIntelligence();
+                }
+                if (item.getShard_id().getMin_damage() != null) {
+                    this.min_damage = this.min_damage + item.getShard_id().getMin_damage();
+                }
+                if (item.getShard_id().getMax_damage() != null) {
+                    this.max_damage = this.max_damage + item.getShard_id().getMax_damage();
+                }
+                if (item.getShard_id().getMin_cold() != null) {
+                    this.min_cold = this.min_cold + item.getShard_id().getMin_cold();
+                }
+                if (item.getShard_id().getMax_cold() != null) {
+                    this.max_cold = this.max_cold + item.getShard_id().getMin_cold();
+                }
+                if (item.getShard_id().getMin_fire() != null) {
+                    this.min_fire = this.min_fire + item.getShard_id().getMin_fire();
+                }
+                if (item.getShard_id().getMax_fire() != null) {
+                    this.max_fire = this.max_fire + item.getShard_id().getMax_fire();
+                }
+                if (item.getShard_id().getMin_poison() != null) {
+                    this.min_poison = this.min_poison + item.getShard_id().getMin_poison();
+                }
+                if (item.getShard_id().getMax_poison() != null) {
+                    this.max_poison = this.max_poison + item.getShard_id().getMax_poison();
+                }
+                if (item.getShard_id().getOff_ability() != null) {
+                    this.off_ability = this.off_ability + item.getShard_id().getOff_ability();
+                }
+                if (item.getShard_id().getRes_bleed() != null) {
+                    this.res_bleed = this.res_bleed + item.getShard_id().getRes_bleed();
+                }
+                if (item.getShard_id().getRes_cold() != null) {
+                    this.res_cold = this.res_cold + item.getShard_id().getRes_cold();
+                }
+                if (item.getShard_id().getRes_electric() != null) {
+                    this.res_electric = this.res_electric + item.getShard_id().getRes_electric();
+                }
+                if (item.getShard_id().getRes_fire() != null) {
+                    this.res_fire = this.res_fire + item.getShard_id().getRes_fire();
+                }
+                if (item.getShard_id().getRes_poison() != null) {
+                    this.res_poison = this.res_poison + item.getShard_id().getRes_poison();
+                }
+                if (item.getShard_id().getRes_stun() != null) {
+                    this.res_stun = this.res_stun + item.getShard_id().getRes_stun();
+                }
+                if (item.getShard_id().getSlow() != null) {
+                    this.slow = this.slow + item.getShard_id().getSlow();
+                }
+                if (item.getShard_id().getStun_chance() != null) {
+                    this.stun_chance = this.stun_chance + item.getShard_id().getStun_chance();
+                }
+                if (item.getShard_id().getStrength() != null) {
+                    this.stun_chance = this.strength + item.getShard_id().getStrength();
+                }
+                if (item.getShard_id().getStrength_percent() != null) {
+                    this.strength_percent = this.strength_percent + item.getShard_id().getStrength_percent();
+                }
+            }
+        }
+
         return bonuses;
     }
 
@@ -1120,6 +1390,7 @@ public class ItemBonuses {
         hero.setHealth_regen(hero.getHealth_regen() + this.health_regen);
         hero.setIntelligence(hero.getIntelligence() + this.intelligence);
         hero.setIntelligence_percent(hero.getIntelligence_percent() + this.intelligence_percent);
+        hero.setIgnore_dmg_percent(hero.getIgnore_dmg_percent() + this.ignore_dmg);
         hero.setMax_bleed(hero.getMax_bleed() + this.max_bleed + this.damage_bleed);
         hero.setMax_cold(hero.getMax_cold() + this.max_cold + this.damage_cold);
         hero.setMax_damage(hero.getMax_damage() + this.max_damage + this.damage);
@@ -1172,6 +1443,7 @@ public class ItemBonuses {
         hero.setHealth(hero.getHealth() - this.health);
         hero.setHp_percent(hero.getHp_percent() - this.health_percent);
         hero.setHealth_regen(hero.getHealth_regen() - this.health_regen);
+        hero.setIgnore_dmg_percent(hero.getIgnore_dmg_percent() - this.ignore_dmg);
         hero.setIntelligence(hero.getIntelligence() - this.intelligence);
         hero.setIntelligence_percent(hero.getIntelligence_percent() - this.intelligence_percent);
         hero.setMax_bleed(hero.getMax_bleed() - this.max_bleed - this.damage_bleed);

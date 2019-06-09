@@ -31,4 +31,8 @@ public EQUIPPED_ITEMS = this.API + '/getEquippedItems/';
   getItemToEnchance(char_id: String, shard_id: String) {
     return this.http.get(this.API + '/getItemToEnchance/' + char_id + '/' + shard_id);
   }
+
+  sellItem(item_id: String) {
+    return this.http.delete(this.API + '/sellItem/' + item_id);
+  }
 }

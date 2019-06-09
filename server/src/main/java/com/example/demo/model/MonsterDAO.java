@@ -572,6 +572,7 @@ public class MonsterDAO {
     
     public MonsterDAO(MonsterDAO monster) {
         this.monster_name = monster.getMonster_name();
+        this.id = monster.getId();
         this.level = monster.getLevel();
         this.experience = monster.getExperience();
         this.health = monster.getHealth();

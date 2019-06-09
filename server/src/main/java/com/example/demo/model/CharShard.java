@@ -5,8 +5,10 @@
  */
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +36,7 @@ public class CharShard {
 
     @OneToOne
     @JoinColumn(name = "char_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Hero hero;
 
     @OneToOne
@@ -42,12 +44,46 @@ public class CharShard {
     @JsonManagedReference
     private Shard shard;
     
+    private String assigned;
+    
     private Integer level;
     
     private Integer armor;
-    
+    private Integer agility;
+    private Integer attack_speed;
     private Integer def_ability;
-    
+    private Integer dmg_bleed;
+    private Integer dmg_bleed_percent;
+    private Integer dmg_cold;
+    private Integer dmg_cold_percent;
+    private Integer dmg_elemental;
+    private Integer dmg_electric_percent;
+    private Integer dmg_fire;
+    private Integer dmg_fire_percent;
+    private Integer dmg_poison;
+    private Integer dmg_poison_percent;
+    private Integer dmg_percent;
+    private Integer health;
+    private Integer health_regen;
+    private Integer intelligence;
+    private Integer intelligence_percent;
+    private Integer min_damage;
+    private Integer max_damage;
+    private Integer min_cold;
+    private Integer max_cold;
+    private Integer max_fire;
+    private Integer min_fire;
+    private Integer max_poison;
+    private Integer min_poison;
+    private Integer off_ability;
     private Integer res_bleed;
     private Integer res_cold;
+    private Integer res_electric;
+    private Integer res_fire;
+    private Integer res_poison;
+    private Integer res_stun;
+    private Integer slow;
+    private Integer stun_chance;
+    private Integer strength;
+    private Integer strength_percent;
 }
