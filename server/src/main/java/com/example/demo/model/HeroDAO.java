@@ -15,6 +15,20 @@ import java.util.Collection;
 public class HeroDAO {
 
     /**
+     * @return the max_health
+     */
+    public Integer getMax_health() {
+        return max_health;
+    }
+
+    /**
+     * @param max_health the max_health to set
+     */
+    public void setMax_health(Integer max_health) {
+        this.max_health = max_health;
+    }
+
+    /**
      * @return the slowed
      */
     public String getSlowed() {
@@ -50,6 +64,7 @@ public class HeroDAO {
         this.char_name = hero.getChar_name();
         this.char_class = hero.getChar_class();
         this.level = hero.getLevel();
+        this.max_health = hero.getHealth();
         this.health = hero.getHealth();
         this.strength = hero.getStrength();
         this.agility = hero.getAgility();
@@ -902,6 +917,7 @@ public class HeroDAO {
     private Integer points;
     private Integer mastery_points;
     private Integer health;
+    private Integer max_health;
     private Integer strength;
     private Integer agility;
     private Integer intelligence;

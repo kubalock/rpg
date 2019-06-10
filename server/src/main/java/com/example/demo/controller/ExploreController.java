@@ -193,15 +193,18 @@ public class ExploreController {
             }
 
             if (me.getHealth() > 0) {
-                int healthRegenerated = me.getHealth_regen();
-                report.add(me.getChar_name() + " regenerates " + healthRegenerated + " health points");
-                int myHealth = me.getHealth() + healthRegenerated;
-                me.setHealth(myHealth);
+                me.setHealth(me.getHealth() + me.getHealth_regen());
+                if (me.getHealth() > me.getMax_health()) {
+                    me.setHealth(me.getMax_health());
+                }
             }
+
             for (MonsterDAO monster : monsters) {
                 if (monster.getHealth() > 0) {
-                    report.add(monster.getMonster_name() + " regenerates " + monster.getHealth_regen() + " health points");
                     monster.setHealth(monster.getHealth() + monster.getHealth_regen());
+                    if(monster.getHealth() > monster.getMax_health()) {
+                        monster.setHealth(monster.getMax_health());
+                    }
                 }
             }
 
@@ -297,7 +300,7 @@ public class ExploreController {
         Random rand = new Random();
 
         int random = rand.nextInt(100);
-        if (random < level * 3) {
+        if (random < 3 + level) {
             return true;
         } else {
             return false;
@@ -308,7 +311,7 @@ public class ExploreController {
         Random rand = new Random();
 
         int random = rand.nextInt(100);
-        if (random < level * 2) {
+        if (random < 2 + level) {
             return true;
         } else {
             return false;
@@ -319,7 +322,7 @@ public class ExploreController {
         Random rand = new Random();
 
         int random = rand.nextInt(100);
-        if (random < level * 2) {
+        if (random < 2 + level) {
             return true;
         } else {
             return false;
@@ -330,7 +333,7 @@ public class ExploreController {
         Random rand = new Random();
 
         int random = rand.nextInt(100);
-        if (random < level) {
+        if (random < 1 + level) {
             return true;
         } else {
             return false;
@@ -502,55 +505,66 @@ public class ExploreController {
 
         int damageDealt = 0;
         Random ran = new Random();
+        double yourDefense = Math.round(you.getDefense() * 0.75);
 
-        if (me.getMin_damage() <= you.getDefense()) {
+        if (me.getMin_damage() <= yourDefense) {
             minDamage = 1;
         } else {
-            minDamage = me.getMin_damage() - you.getDefense();
+            minDamage = me.getMin_damage() - (int) yourDefense;
         }
-        if (me.getMax_damage() <= you.getDefense()) {
+        if (me.getMax_damage() <= yourDefense) {
             maxDamage = 1;
         } else {
-            maxDamage = me.getMax_damage() - you.getDefense();
+            maxDamage = me.getMax_damage() - (int) yourDefense;
         }
 
-        damageDealt = ran.nextInt(maxDamage) + minDamage;
+        damageDealt = ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         int blockedDamage = 0;
 
         if (you.getBlock_chance() > 0) {
             if (ran.nextInt(100) < you.getBlock_chance()) {
+                if (you.getBlock() <= damageDealt) {
+                    blockedDamage = you.getBlock();
+                } else if (you.getBlock() > damageDealt) {
+                    blockedDamage = damageDealt;
+                }
                 damageDealt = damageDealt - you.getBlock();
-                if (damageDealt < 0) {
+                if (damageDealt <= 0) {
                     damageDealt = 0;
                 }
-                blockedDamage = you.getBlock();
             }
         }
 
         if (me.getMin_bleed() > 0) {
-            minDamage = Math.round((1 - (you.getRes_bleed() / 100)) * me.getMin_bleed());
-            maxDamage = Math.round((1 - (you.getRes_bleed() / 100)) * me.getMax_bleed());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_bleed()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_bleed()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_bleed()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_cold() > 0) {
-            minDamage = Math.round((1 - (you.getRes_cold() / 100)) * me.getMin_cold());
-            maxDamage = Math.round((1 - (you.getRes_cold() / 100)) * me.getMax_cold());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_cold()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_cold()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_cold()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
+
         }
         if (me.getMin_electric() > 0) {
-            minDamage = Math.round((1 - (you.getRes_electric() / 100)) * me.getMin_electric());
-            maxDamage = Math.round((1 - (you.getRes_electric() / 100)) * me.getMax_electric());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_electric()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_electric()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_electric()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_fire() > 0) {
-            minDamage = Math.round((1 - (you.getRes_fire() / 100)) * me.getMin_fire());
-            maxDamage = Math.round((1 - (you.getRes_fire() / 100)) * me.getMax_fire());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_fire()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_fire()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_fire()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_poison() > 0) {
-            minDamage = Math.round((1 - (you.getRes_poison() / 100)) * me.getMin_poison());
-            maxDamage = Math.round((1 - (you.getRes_poison() / 100)) * me.getMax_poison());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_poison()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_poison()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_poison()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
 
         if (you.getIgnore_dmg_percent() > 0) {
@@ -573,55 +587,66 @@ public class ExploreController {
 
         int damageDealt = 0;
         Random ran = new Random();
+        double yourDefense = Math.round(monster.getDefense() * 0.75);
 
         if (me.getMin_damage() <= monster.getDefense()) {
             minDamage = 1;
         } else {
-            minDamage = me.getMin_damage() - monster.getDefense();
+            minDamage = me.getMin_damage() - (int) yourDefense;
         }
         if (me.getMax_damage() <= monster.getDefense()) {
             maxDamage = 1;
         } else {
-            maxDamage = me.getMax_damage() - monster.getDefense();
+            maxDamage = me.getMax_damage() - (int) yourDefense;
         }
 
-        damageDealt = ran.nextInt(maxDamage) + minDamage;
+        damageDealt = ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         int blockedDamage = 0;
 
         if (monster.getBlock_chance() > 0) {
             if (ran.nextInt(100) < monster.getBlock_chance()) {
+                if (monster.getBlock() <= damageDealt) {
+                    blockedDamage = monster.getBlock();
+                } else if (monster.getBlock() > damageDealt) {
+                    blockedDamage = damageDealt;
+                }
                 damageDealt = damageDealt - monster.getBlock();
-                if (damageDealt < 0) {
+                if (damageDealt <= 0) {
                     damageDealt = 0;
                 }
-                blockedDamage = monster.getBlock();
             }
         }
 
         if (me.getMin_bleed() > 0) {
-            minDamage = Math.round((1 - (monster.getRes_bleed() / 100)) * me.getMin_bleed());
-            maxDamage = Math.round((1 - (monster.getRes_bleed() / 100)) * me.getMax_bleed());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(monster.getRes_bleed()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_bleed()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_bleed()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_cold() > 0) {
-            minDamage = Math.round((1 - (monster.getRes_cold() / 100)) * me.getMin_cold());
-            maxDamage = Math.round((1 - (monster.getRes_cold() / 100)) * me.getMax_cold());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(monster.getRes_cold()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_cold()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_cold()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
+
         }
         if (me.getMin_electric() > 0) {
-            minDamage = Math.round((1 - (monster.getRes_electric() / 100)) * me.getMin_electric());
-            maxDamage = Math.round((1 - (monster.getRes_electric() / 100)) * me.getMax_electric());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(monster.getRes_electric()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_electric()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_electric()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_fire() > 0) {
-            minDamage = Math.round((1 - (monster.getRes_fire() / 100)) * me.getMin_fire());
-            maxDamage = Math.round((1 - (monster.getRes_fire() / 100)) * me.getMax_fire());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(monster.getRes_fire()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_fire()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_fire()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_poison() > 0) {
-            minDamage = Math.round((1 - (monster.getRes_poison() / 100)) * me.getMin_poison());
-            maxDamage = Math.round((1 - (monster.getRes_poison() / 100)) * me.getMax_poison());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(monster.getRes_poison()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_poison()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_poison()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
 
         if (me.getStun_chance() > 0) {
@@ -707,14 +732,14 @@ public class ExploreController {
 
         for (Monster monster : monsters) {
             random = rand.nextInt(100) + 1;
-            if (random > 50) {
+            if (random < 40) {
                 monstersDAO.add(this.transformMonster(monster));
             }
         }
 
         for (MonsterDAO monsterDAO : monstersDAO) {
             random = rand.nextInt(100) + 1;
-            while (random > 50) {
+            while (random < 40) {
                 MonsterDAO duplicate = new MonsterDAO(monsterDAO);
                 random = rand.nextInt(100);
                 duplicates.add(duplicate);
@@ -893,6 +918,7 @@ public class ExploreController {
         monsterDAO.setDef_ability(monster.getDef_ability());
         monsterDAO.setDefense(monster.getDefense());
         monsterDAO.setExperience(monster.getExperience());
+        monsterDAO.setMax_health(monster.getHealth());
         monsterDAO.setHealth(monster.getHealth());
         monsterDAO.setHealth_regen(monster.getHealth_regen());
         monsterDAO.setLevel(monster.getLevel());

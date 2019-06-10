@@ -15,6 +15,20 @@ import java.util.Collection;
 public class MonsterDAO {
 
     /**
+     * @return the max_health
+     */
+    public Integer getMax_health() {
+        return max_health;
+    }
+
+    /**
+     * @param max_health the max_health to set
+     */
+    public void setMax_health(Integer max_health) {
+        this.max_health = max_health;
+    }
+
+    /**
      * @return the slowed
      */
     public String getSlowed() {
@@ -475,75 +489,42 @@ public class MonsterDAO {
     public void setExperience(Integer experience) {
         this.experience = experience;
     }
-    
+
     private Long id;
-    
-    private 
-    String monster_name;
-    private 
-    Integer level;
-    private 
-    Integer health;
-    private 
-    Integer res_fire;
-    private 
-    Integer res_cold;
-    private 
-    Integer res_electric;
-    private 
-    Integer res_poison;
-    private 
-    Integer defense;
-    private 
-    Integer block_chance;
-    private 
-    Integer block;
-    private 
-    Integer res_bleed;
-    private 
-    Integer res_stun;
-    private 
-    Integer health_regen;
-    private 
-    Integer off_ability;
-    private 
-    Integer def_ability;
-    private 
-    Integer min_damage;
-    private 
-    Integer max_damage;
-    private 
-    Integer min_cold;
-    private 
-    Integer max_cold;
-    private 
-    Integer min_fire;
-    private 
-    Integer max_fire;
-    private 
-    Integer min_electric;
-    private 
-    Integer max_electric;
-    private 
-    Integer min_bleed;
-    private 
-    Integer max_bleed;
-    private 
-    Integer min_poison;
-    private 
-    Integer max_poison;
-    private 
-    Integer stun_chance;
-    private 
-    Integer attack_speed;
-    private 
-    Integer experience;
-    private 
-    Integer stunned;
-    private
-    String slowed;
-    
-    
+
+    private String monster_name;
+    private Integer level;
+    private Integer health;
+    private Integer max_health;
+    private Integer res_fire;
+    private Integer res_cold;
+    private Integer res_electric;
+    private Integer res_poison;
+    private Integer defense;
+    private Integer block_chance;
+    private Integer block;
+    private Integer res_bleed;
+    private Integer res_stun;
+    private Integer health_regen;
+    private Integer off_ability;
+    private Integer def_ability;
+    private Integer min_damage;
+    private Integer max_damage;
+    private Integer min_cold;
+    private Integer max_cold;
+    private Integer min_fire;
+    private Integer max_fire;
+    private Integer min_electric;
+    private Integer max_electric;
+    private Integer min_bleed;
+    private Integer max_bleed;
+    private Integer min_poison;
+    private Integer max_poison;
+    private Integer stun_chance;
+    private Integer attack_speed;
+    private Integer experience;
+    private Integer stunned;
+    private String slowed;
 
     public Collection<String> info() {
         Collection<String> output = new ArrayList<String>();
@@ -565,17 +546,18 @@ public class MonsterDAO {
         output.add("Stun Resistance: " + this.getRes_stun());
         return output;
     }
-    
+
     public MonsterDAO() {
-        
+
     }
-    
+
     public MonsterDAO(MonsterDAO monster) {
         this.monster_name = monster.getMonster_name();
         this.id = monster.getId();
         this.level = monster.getLevel();
         this.experience = monster.getExperience();
         this.health = monster.getHealth();
+        this.max_health = monster.getHealth();
         this.res_fire = monster.getRes_fire();
         this.res_cold = monster.getRes_cold();
         this.res_electric = monster.getRes_electric();

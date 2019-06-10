@@ -101,16 +101,16 @@ public class FightController {
             }
 
             if (me.getHealth() > 0) {
-                int healthRegenerated = (me.getEndurance() / 2) + me.getHealth_regen();
-                report.add(me.getChar_name() + " regenerates " + healthRegenerated + " health points");
-                int myHealth = me.getHealth() + healthRegenerated;
-                me.setHealth(myHealth);
+                me.setHealth(me.getHealth() + me.getHealth_regen());
+                if (me.getHealth() > me.getMax_health()) {
+                    me.setHealth(me.getMax_health());
+                }
             }
             if (you.getHealth() > 0) {
-                int healthRegenerated = (you.getEndurance() / 2) + you.getHealth_regen();
-                report.add(you.getChar_name() + " regenerates " + healthRegenerated + " health points");
-                int yourHealth = you.getHealth() + healthRegenerated;
-                you.setHealth(yourHealth);
+                me.setHealth(you.getHealth() + you.getHealth_regen());
+                if (you.getHealth() > you.getMax_health()) {
+                    you.setHealth(me.getMax_health());
+                }
             }
             report.add("");
             round++;
@@ -264,28 +264,28 @@ public class FightController {
                 return false;
             }
         } else if (myOffensive > yourDeffensive) {
-            if (Math.round(difference/2) > 30) {
+            if (Math.round(difference / 2) > 30) {
                 if (random < 90) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 + Math.round(difference/2)) {
+                if (random < 60 + Math.round(difference / 2)) {
                     return true;
                 } else {
                     return false;
                 }
             }
         } else if (myOffensive < yourDeffensive) {
-            if (Math.round(difference/2) > 30) {
+            if (Math.round(difference / 2) > 30) {
                 if (random < 30) {
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                if (random < 60 - Math.round(difference/2)) {
+                if (random < 60 - Math.round(difference / 2)) {
                     return true;
                 } else {
                     return false;
@@ -315,28 +315,31 @@ public class FightController {
     }
 
     public Collection<Integer> damageDealt(HeroDAO me, HeroDAO you) {
-        int minDamage, maxDamage;
+        int minDamage = 0;
+        int maxDamage = 0;
 
         Collection<Integer> output = new ArrayList<>();
 
         int damageDealt = 0;
         Random ran = new Random();
+        double yourDefense = Math.round(you.getDefense() * 0.75);
 
-        if (me.getMin_damage() <= you.getDefense()) {
+        if (me.getMin_damage() <= yourDefense) {
             minDamage = 1;
         } else {
-            minDamage = me.getMin_damage() - you.getDefense();
+            minDamage = me.getMin_damage() - (int) yourDefense;
             if (you.getIgnore_dmg_percent() > 0) {
                 minDamage = Math.round(minDamage - ((you.getIgnore_dmg_percent() / 100) * minDamage));
+                System.out.println("Ignore?");
                 if (minDamage <= 0) {
                     minDamage = 1;
                 }
             }
         }
-        if (me.getMax_damage() <= you.getDefense()) {
+        if (me.getMax_damage() <= yourDefense) {
             maxDamage = 1;
         } else {
-            maxDamage = me.getMax_damage() - you.getDefense();
+            maxDamage = me.getMax_damage() - (int) yourDefense;
             if (you.getIgnore_dmg_percent() > 0) {
                 maxDamage = Math.round(maxDamage - ((you.getIgnore_dmg_percent() / 100) * maxDamage));
                 if (maxDamage <= 0) {
@@ -344,44 +347,53 @@ public class FightController {
                 }
             }
         }
-
-        damageDealt = ran.nextInt(maxDamage) + minDamage;
+        damageDealt = ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         int blockedDamage = 0;
 
         if (you.getBlock_chance() > 0) {
             if (ran.nextInt(100) < you.getBlock_chance()) {
+                if (you.getBlock() <= damageDealt) {
+                    blockedDamage = you.getBlock();
+                } else if (you.getBlock() > damageDealt) {
+                    blockedDamage = damageDealt;
+                }
                 damageDealt = damageDealt - you.getBlock();
                 if (damageDealt <= 0) {
                     damageDealt = 0;
                 }
-                blockedDamage = you.getBlock();
             }
         }
 
         if (me.getMin_bleed() > 0) {
-            minDamage = Math.round((1 - (you.getRes_bleed() / 100)) * me.getMin_bleed());
-            maxDamage = Math.round((1 - (you.getRes_bleed() / 100)) * me.getMax_bleed());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_bleed()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_bleed()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_bleed()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_cold() > 0) {
-            minDamage = Math.round((1 - (you.getRes_cold() / 100)) * me.getMin_cold());
-            maxDamage = Math.round((1 - (you.getRes_cold() / 100)) * me.getMax_cold());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_cold()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_cold()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_cold()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
+
         }
         if (me.getMin_electric() > 0) {
-            minDamage = Math.round((1 - (you.getRes_electric() / 100)) * me.getMin_electric());
-            maxDamage = Math.round((1 - (you.getRes_electric() / 100)) * me.getMax_electric());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_electric()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_electric()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_electric()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_fire() > 0) {
-            minDamage = Math.round((1 - (you.getRes_fire() / 100)) * me.getMin_fire());
-            maxDamage = Math.round((1 - (you.getRes_fire() / 100)) * me.getMax_fire());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_fire()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_fire()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_fire()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
         if (me.getMin_poison() > 0) {
-            minDamage = Math.round((1 - (you.getRes_poison() / 100)) * me.getMin_poison());
-            maxDamage = Math.round((1 - (you.getRes_poison() / 100)) * me.getMax_poison());
-            damageDealt = damageDealt + ran.nextInt(maxDamage) + minDamage;
+            float resMultiply = 1 - (Float.valueOf(you.getRes_poison()) / 100);
+            minDamage = Math.round(resMultiply * Float.valueOf(me.getMin_poison()));
+            maxDamage = Math.round(resMultiply * Float.valueOf(me.getMax_poison()));
+            damageDealt = damageDealt + ran.nextInt(maxDamage - minDamage + 1) + minDamage;
         }
 
         if (me.getStun_chance() > 0) {

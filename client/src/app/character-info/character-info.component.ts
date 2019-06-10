@@ -93,7 +93,7 @@ export class CharacterInfoComponent implements OnInit {
   }
 
   addHealth() {
-    this.hero.health = this.hero.health + 20;
+    this.hero.health = this.hero.health + 28;
     this.hero.points = this.hero.points - 1;
     if(this.hero.points == 0) {
       this.charPoints = false;
@@ -144,9 +144,9 @@ export class CharacterInfoComponent implements OnInit {
 
   levelUp() {
     this.hero.level = this.hero.level + 1;
-    this.hero.points = this.hero.points + 4;
+    this.hero.points = this.hero.points + 3;
     this.hero.experience = this.hero.experience - this.hero.next_level;
-    this.hero.next_level = (this.hero.next_level * 1.2).toFixed();
+    this.hero.next_level = (this.hero.next_level * 1.3).toFixed();
     this.hero.mastery_points = this.hero.mastery_points + 3;
     this.characterService.updateHero(this.hero).subscribe();
     this.enoughExp = false;
