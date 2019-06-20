@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CharacterService } from '../shared/character/character.service';
-import { UserService } from '../shared/user/user.service';
 import { AppComponent } from '../app.component';
 
 @Component({
@@ -27,22 +26,18 @@ export class CharacterSelectedComponent implements OnInit {
   bleedDamage = false;
   poisonDamage = false;
 
-  isFight: false;
+  isFight = false;
 
   fightResult: Array<any>;
 
   hero: any = {};
 
   constructor(private characterService: CharacterService,
-              private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService,
               private appComponent: AppComponent) { }
 
   ngOnInit() {
-    this.user_id = sessionStorage.getItem('user_id');
-    this.userService.getUsername(sessionStorage.getItem('username')).subscribe((result: any) => {
-    this.my_id = result.hero.char_id;
+    this.my_id = sessionStorage.getItem('char_id');
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.characterService.getHero(this.id).subscribe(hero => {
@@ -67,7 +62,7 @@ export class CharacterSelectedComponent implements OnInit {
         }
       });
     });
-  });
+
   this.appComponent.getResources();
   }
 
@@ -79,178 +74,86 @@ export class CharacterSelectedComponent implements OnInit {
   }
 
   calcStrength() {
-    if(this.hero.strength_percent > 0) {
-      return this.hero.strength + (Math.round((this.hero.strength_percent/100) * this.hero.strength));
-    } else {
-      return this.hero.strength;
+    return this.characterService.calcStrength(this.hero);
     }
-  }
 
   calcMinDmg() {
-    let damage = 0;
-    if(this.hero.dmg_percent > 0) {
-        damage = this.hero.min_damage + ((this.hero.dmg_percent/100) * this.hero.min_damage);
-        return (damage + this.calcStrength()).toFixed();
-    } else {
-      return (this.hero.min_damage + this.calcStrength()).toFixed();
+    return this.characterService.calcMinDmg(this.hero);
     }
-  }
 
   calcMaxDmg() {
-    let damage = 0;
-    if(this.hero.dmg_percent > 0) {
-      damage = this.hero.max_damage + ((this.hero.dmg_percent/100) * this.hero.max_damage);
-      return (damage + this.calcStrength()).toFixed();
-    } else {
-      return (this.hero.max_damage + this.calcStrength()).toFixed();
-    }
+    return this.characterService.calcMaxDmg(this.hero);
   }
 
   calcHP() {
-    if(this.hero.hp_percent > 0) {
-      return (this.hero.health + ((this.hero.hp_percent/100) * this.hero.health)).toFixed();
-    } else {
-      return this.hero.health;
-    }
+    return this.characterService.calcHP(this.hero);
   }
 
   calcAgility() {
-      if(this.hero.agility_percent > 0) {
-        return (this.hero.agility + ((this.hero.agility_percent/100) * this.hero.agility)).toFixed();
-      } else {
-        return this.hero.agility;
-      }
+    return this.characterService.calcAgility(this.hero);
     }
 
   calcIntelligence() {
-      if(this.hero.intelligence_percent > 0) {
-        return (this.hero.intelligence + ((this.hero.intelligence_percent/100) * this.hero.intelligence)).toFixed();
-      } else {
-        return this.hero.intelligence;
-      }
+    return this.characterService.calcIntelligence(this.hero);
     }
 
   calcMinFire() {
-      if(this.hero.fire_percent > 0) {
-        return (this.hero.min_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.min_fire)).toFixed();
-      } else {
-        if(this.hero.min_fire > 0) {
-        return this.hero.min_fire + Math.round(this.calcIntelligence() / 2);
-      }
-      }
+    return this.characterService.calcMinFire(this.hero);
     }
 
   calcMaxFire() {
-      if(this.hero.fire_percent > 0) {
-        return (this.hero.max_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.max_fire)).toFixed();
-      } else {
-        if(this.hero.max_fire > 0) {
-        return this.hero.max_fire + Math.round(this.calcIntelligence() / 2);
-      }
-      }
+    return this.characterService.calcMaxFire(this.hero);
     }
 
-    calcMinCold() {
-        if(this.hero.cold_percent > 0) {
-          return (this.hero.min_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
-        } else {
-          if(this.hero.min_cold > 0) {
-          return this.hero.min_cold + Math.round(this.calcIntelligence() / 2);
-        }
-        }
-      }
+  calcMinCold() {
+    return this.characterService.calcMinCold(this.hero);
+    }
 
-    calcMaxCold() {
-        if(this.hero.cold_percent > 0) {
-          return (this.hero.max_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
-        } else {
-          if(this.hero.max_cold > 0) {
-          return this.hero.max_cold + Math.round(this.calcIntelligence() / 2);
-        }
-        }
-      }
+  calcMaxCold() {
+    return this.characterService.calcMaxCold(this.hero);
+    }
 
-      calcMinElectric() {
-          if(this.hero.electric_percent > 0) {
-            return (this.hero.min_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
-          } else {
-            if(this.hero.min_electric > 0) {
-            return this.hero.min_electric + Math.round(this.calcIntelligence() / 2);
-          }
-          }
-        }
+  calcMinElectric() {
+    return this.characterService.calcMinElectric(this.hero);
+    }
 
-      calcMaxElectric() {
-          if(this.hero.electric_percent > 0) {
-            return (this.hero.max_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
-          } else {
-            if(this.hero.max_electric > 0) {
-            return this.hero.max_electric + Math.round(this.calcIntelligence() / 2);
-          }
-          }
-        }
+  calcMaxElectric() {
+    return this.characterService.calcMaxElectric(this.hero);
+    }
 
-        calcMinBleed() {
-            if(this.hero.bleed_percent > 0) {
-              return (this.hero.min_bleed + ((this.hero.bleed_percent/100) * this.hero.min_bleed)).toFixed();
-            } else {
-              return this.hero.min_bleed;
-            }
-          }
+  calcMinBleed() {
+    return this.characterService.calcMinBleed(this.hero);
+    }
 
-        calcMaxBleed() {
-            if(this.hero.bleed_percent > 0) {
-              return (this.hero.max_bleed + ((this.hero.bleed_percent/100) * this.hero.max_bleed)).toFixed();
-            } else {
-              return this.hero.max_bleed;
-            }
-          }
+  calcMaxBleed() {
+    return this.characterService.calcMaxBleed(this.hero);
+    }
 
-          calcMinPoison() {
-              if(this.hero.poison_percent > 0) {
-                return (this.hero.min_poison + ((this.hero.fire_percent/100) * this.hero.min_poison)).toFixed();
-              } else {
-                return this.hero.min_poison;
-              }
-            }
+  calcMinPoison() {
+    return this.characterService.calcMinPoison(this.hero);
+    }
 
-          calcMaxPoison() {
-              if(this.hero.fire_percent > 0) {
-                return (this.hero.max_poison + ((this.hero.fire_percent/100) * this.hero.max_poison)).toFixed();
-              } else {
-                return this.hero.max_poison;
-              }
-            }
+  calcMaxPoison() {
+    return this.characterService.calcMaxPoison(this.hero);
+    }
 
   calcEndurance() {
-      if(this.hero.endurance_percent > 0) {
-        return (this.hero.endurance + ((this.hero.endurance_percent/100) * this.hero.endurance)).toFixed();
-      } else {
-        return this.hero.endurance;
-      }
+    return this.characterService.calcEndurance(this.hero);
     }
 
   calcOffAbility() {
-    if(this.hero.off_ability_percent > 0) {
-        return (this.hero.off_ability + this.calcAgility()) + ((this.hero.off_ability_percent/100) * this.hero.off_ability);
-    } else {
-    return this.hero.off_ability + this.calcAgility();
-  }
+    return this.characterService.calcOffAbility(this.hero);
     }
 
   calcDefAbility() {
-      if(this.hero.def_ability_percent > 0) {
-          return (this.hero.def_ability + this.calcAgility()) + ((this.hero.def_ability_percent/100) * this.hero.def_ability);
-      } else {
-      return this.hero.def_ability + this.calcAgility();
-    }
+    return this.characterService.calcDefAbility(this.hero);
     }
 
   calcHealthRegen() {
-    return this.hero.health_regen + Math.round((this.calcEndurance()/2));
+    return this.characterService.calcHealthRegen(this.hero);
   }
 
   calcDefense() {
-    return this.hero.defense + Math.round((this.calcEndurance()/2));
+    return this.characterService.calcDefense(this.hero);
   }
 }

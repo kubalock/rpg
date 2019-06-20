@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CharacterService } from '../shared/character/character.service';
 import { UserService } from '../shared/user/user.service';
-import { MasteryService } from '../shared/mastery/mastery.service';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 
 @Component({
@@ -30,9 +29,7 @@ export class CharacterInfoComponent implements OnInit {
 
   constructor(private characterService: CharacterService,
               private router: Router,
-              private route: ActivatedRoute,
               private userService: UserService,
-              private masteryService: MasteryService,
               private appComponent: AppComponent) { }
 
   ngOnInit() {
@@ -41,28 +38,28 @@ export class CharacterInfoComponent implements OnInit {
     }
     if(sessionStorage.getItem('hero') != null) {
       this.haveCharacter = true;
-      this.characterService.getHeroName(sessionStorage.getItem('hero')).subscribe((hero: any) => {
+      this.characterService.getHero(sessionStorage.getItem('char_id')).subscribe((hero: any) => {
       this.hero = hero;
 
-      if(this.hero.points > 0) {
-          this.charPoints = true;
-        }
-      if(this.hero.experience >= this.hero.next_level) {
-          this.enoughExp = true;
-        }
-      if(this.hero.min_cold > 0) {
+    if(this.hero.points > 0) {
+      this.charPoints = true;
+    }
+    if(this.hero.experience >= this.hero.next_level) {
+      this.enoughExp = true;
+    }
+    if(this.hero.min_cold > 0) {
       this.coldDamage = true;
     }
-      if(this.hero.min_fire > 0) {
+    if(this.hero.min_fire > 0) {
       this.fireDamage = true;
     }
-      if(this.hero.min_electric > 0) {
+    if(this.hero.min_electric > 0) {
       this.electricDamage = true;
     }
-      if(this.hero.min_poison > 0) {
+    if(this.hero.min_poison > 0) {
       this.poisonDamage = true;
     }
-      if(this.hero.min_bleed > 0) {
+    if(this.hero.min_bleed > 0) {
       this.bleedDamage = true;
     }
     });
@@ -139,7 +136,6 @@ export class CharacterInfoComponent implements OnInit {
 
   enterPoints() {
     this.characterService.updateHero(this.hero).subscribe();
-    this.router.navigate(['/dashboard']);
   }
 
   levelUp() {
@@ -154,186 +150,86 @@ export class CharacterInfoComponent implements OnInit {
   }
 
   calcStrength() {
-    if(this.hero.strength_percent > 0) {
-      return this.hero.strength + (Math.round((this.hero.strength_percent/100) * this.hero.strength));
-    } else {
-      return this.hero.strength;
+    return this.characterService.calcStrength(this.hero);
     }
-  }
 
   calcMinDmg() {
-    let damage = 0;
-    if(this.hero.dmg_percent > 0) {
-        damage = this.hero.min_damage + ((this.hero.dmg_percent/100) * this.hero.min_damage);
-        return (damage + this.calcStrength()).toFixed();
-    } else {
-      return (this.hero.min_damage + this.calcStrength()).toFixed();
+    return this.characterService.calcMinDmg(this.hero);
     }
-  }
 
   calcMaxDmg() {
-    let damage = 0;
-    if(this.hero.dmg_percent > 0) {
-      damage = this.hero.max_damage + ((this.hero.dmg_percent/100) * this.hero.max_damage);
-      return (damage + this.calcStrength()).toFixed();
-    } else {
-      return (this.hero.max_damage + this.calcStrength()).toFixed();
-    }
+    return this.characterService.calcMaxDmg(this.hero);
   }
 
   calcHP() {
-    let hp = 0;
-    if(this.hero.hp_percent > 0) {
-      hp = this.hero.health + (this.hero.hp_percent/100) * this.hero.health;
-      return Math.round(hp);
-    } else {
-      return this.hero.health;
-    }
+    return this.characterService.calcHP(this.hero);
   }
 
   calcAgility() {
-    let agility = 0;
-      if(this.hero.agility_percent > 0) {
-        agility = this.hero.agility + (this.hero.agility_percent/100) * this.hero.agility;
-        return Math.round(agility);
-      } else {
-        return this.hero.agility;
-      }
+    return this.characterService.calcAgility(this.hero);
     }
 
   calcIntelligence() {
-      if(this.hero.intelligence_percent > 0) {
-        return (this.hero.intelligence + ((this.hero.intelligence_percent/100) * this.hero.intelligence)).toFixed();
-      } else {
-        return this.hero.intelligence;
-      }
+    return this.characterService.calcIntelligence(this.hero);
     }
 
-    calcMinFire() {
-        if(this.hero.fire_percent > 0) {
-          return (this.hero.min_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.min_fire)).toFixed();
-        } else {
-          if(this.hero.min_fire > 0) {
-          return this.hero.min_fire + Math.round(this.calcIntelligence() / 2);
-        }
-        }
-      }
+  calcMinFire() {
+    return this.characterService.calcMinFire(this.hero);
+    }
 
-    calcMaxFire() {
-        if(this.hero.fire_percent > 0) {
-          return (this.hero.max_fire + Math.round(this.calcIntelligence() / 2) + ((this.hero.fire_percent/100) * this.hero.max_fire)).toFixed();
-        } else {
-          if(this.hero.max_fire > 0) {
-          return this.hero.max_fire + Math.round(this.calcIntelligence() / 2);
-        }
-        }
-      }
+  calcMaxFire() {
+    return this.characterService.calcMaxFire(this.hero);
+    }
 
-      calcMinCold() {
-          if(this.hero.cold_percent > 0) {
-            return (this.hero.min_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.min_cold)).toFixed();
-          } else {
-            if(this.hero.min_cold > 0) {
-            return this.hero.min_cold + Math.round(this.calcIntelligence() / 2);
-          }
-          }
-        }
+  calcMinCold() {
+    return this.characterService.calcMinCold(this.hero);
+    }
 
-      calcMaxCold() {
-          if(this.hero.cold_percent > 0) {
-            return (this.hero.max_cold + Math.round(this.calcIntelligence() / 2) + ((this.hero.cold_percent/100) * this.hero.max_cold)).toFixed();
-          } else {
-            if(this.hero.max_cold > 0) {
-            return this.hero.max_cold + Math.round(this.calcIntelligence() / 2);
-          }
-          }
-        }
+  calcMaxCold() {
+    return this.characterService.calcMaxCold(this.hero);
+    }
 
-        calcMinElectric() {
-            if(this.hero.electric_percent > 0) {
-              return (this.hero.min_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.min_electric)).toFixed();
-            } else {
-              if(this.hero.min_electric > 0) {
-              return this.hero.min_electric + Math.round(this.calcIntelligence() / 2);
-            }
-            }
-          }
+  calcMinElectric() {
+    return this.characterService.calcMinElectric(this.hero);
+    }
 
-        calcMaxElectric() {
-            if(this.hero.electric_percent > 0) {
-              return (this.hero.max_electric + Math.round(this.calcIntelligence() / 2) + ((this.hero.electric_percent/100) * this.hero.max_electric)).toFixed();
-            } else {
-              if(this.hero.max_electric > 0) {
-              return this.hero.max_electric + Math.round(this.calcIntelligence() / 2);
-            }
-            }
-          }
+  calcMaxElectric() {
+    return this.characterService.calcMaxElectric(this.hero);
+    }
 
   calcMinBleed() {
-            if(this.hero.bleed_percent > 0) {
-              return (this.hero.min_bleed + ((this.hero.bleed_percent/100) * this.hero.min_bleed)).toFixed();
-            } else {
-              return this.hero.min_bleed;
-            }
-          }
+    return this.characterService.calcMinBleed(this.hero);
+    }
 
   calcMaxBleed() {
-            if(this.hero.bleed_percent > 0) {
-              return (this.hero.max_bleed + ((this.hero.bleed_percent/100) * this.hero.max_bleed)).toFixed();
-            } else {
-              return this.hero.max_bleed;
-            }
-          }
+    return this.characterService.calcMaxBleed(this.hero);
+    }
 
   calcMinPoison() {
-              if(this.hero.poison_percent > 0) {
-                return (this.hero.min_poison + ((this.hero.fire_percent/100) * this.hero.min_poison)).toFixed();
-              } else {
-                return this.hero.min_poison;
-              }
-            }
+    return this.characterService.calcMinPoison(this.hero);
+    }
 
   calcMaxPoison() {
-              if(this.hero.fire_percent > 0) {
-                return (this.hero.max_poison + ((this.hero.fire_percent/100) * this.hero.max_poison)).toFixed();
-              } else {
-                return this.hero.max_poison;
-              }
-            }
+    return this.characterService.calcMaxPoison(this.hero);
+    }
 
   calcEndurance() {
-      if(this.hero.endurance_percent > 0) {
-        return (this.hero.endurance + ((this.hero.endurance_percent/100) * this.hero.endurance)).toFixed();
-      } else {
-        return this.hero.endurance;
-      }
+    return this.characterService.calcEndurance(this.hero);
     }
 
   calcOffAbility() {
-    let off = 0;
-    if(this.hero.off_ability_percent > 0) {
-        off = this.calcAgility() + (this.hero.off_ability_percent/100 * this.hero.off_ability) + this.hero.off_ability;
-        return Math.round(off);
-    } else {
-    return this.hero.off_ability + this.calcAgility();
-  }
+    return this.characterService.calcOffAbility(this.hero);
     }
 
   calcDefAbility() {
-    let def = 0;
-      if(this.hero.def_ability_percent > 0) {
-          def = this.calcAgility() + (this.hero.def_ability_percent/100 * this.hero.def_ability) + this.hero.def_ability;
-          return Math.round(def);
-      } else {
-      return this.hero.def_ability + this.calcAgility();
-    }
+    return this.characterService.calcDefAbility(this.hero);
     }
 
   calcHealthRegen() {
-    return this.hero.health_regen + Math.round((this.calcEndurance()/2));
+    return this.characterService.calcHealthRegen(this.hero);
   }
 
   calcDefense() {
-    return this.hero.defense + Math.round((this.calcEndurance()/2));
+    return this.characterService.calcDefense(this.hero);
   }
   }

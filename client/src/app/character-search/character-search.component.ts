@@ -24,6 +24,9 @@ export class CharacterSearchComponent implements OnInit {
               private appComponent: AppComponent) { }
 
   ngOnInit() {
+    if(sessionStorage.getItem('user_id') == 'undefined') {
+      this.router.navigate(['/index']);
+    }
     if(sessionStorage.getItem('hero') != null) {
     this.hero = sessionStorage.getItem('hero');
     this.characterService.getAllHeroes(this.hero).subscribe((heroes: any) => {

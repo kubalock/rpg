@@ -102,7 +102,7 @@ public class ExploreController {
 
         int round = 1;
 
-        List<MonsterDAO> monsters = this.getMonsters(level);
+        List<MonsterDAO> monsters = this.getMonsters(level, me.getLevel());
 
         List<Long> monsterIds = new ArrayList<Long>();
 
@@ -114,7 +114,6 @@ public class ExploreController {
             report.add(line);
         }
         for (MonsterDAO monster : monsters) {
-            System.out.println(monster.getId());
             monsterIds.add(monster.getId());
             for (String line : monster.info()) {
                 report.add(line);
@@ -384,8 +383,8 @@ public class ExploreController {
 
     public boolean prefSuffChance(Long level) {
         Random rand = new Random();
-        int random = rand.nextInt(200);
-        if (random < level * 10) {
+        int random = rand.nextInt(100);
+        if (random < level * 2) {
             return true;
         }
         return false;
@@ -394,7 +393,7 @@ public class ExploreController {
     public boolean itemChance(Long level) {
         Random rand = new Random();
         int random = rand.nextInt(100);
-        if (random < level * 10) {
+        if (random < level * 2) {
             return true;
         }
         return false;
@@ -717,7 +716,7 @@ public class ExploreController {
         return false;
     }
 
-    public List<MonsterDAO> getMonsters(Long level) {
+    public List<MonsterDAO> getMonsters(Long level, int myLevel) {
         Random rand = new Random();
         int random;
 
@@ -730,26 +729,29 @@ public class ExploreController {
         monstersDAO.add(this.transformMonster(monsters.get(0)));
         monsters.remove(0);
 
+        int nextChance = 50;
+        
         for (Monster monster : monsters) {
             random = rand.nextInt(100) + 1;
-            if (random < 40) {
+            if (random < nextChance) {
                 monstersDAO.add(this.transformMonster(monster));
+                nextChance--;
             }
         }
-
         for (MonsterDAO monsterDAO : monstersDAO) {
             random = rand.nextInt(100) + 1;
-            while (random < 40) {
+            while (random < nextChance) {
                 MonsterDAO duplicate = new MonsterDAO(monsterDAO);
                 random = rand.nextInt(100);
                 duplicates.add(duplicate);
+                nextChance--;
             }
             //this.assingLevels(monster);
         }
         monstersDAO.addAll(duplicates);
 
         for (MonsterDAO monsterDAO : monstersDAO) {
-            this.assingLevels(monsterDAO);
+            this.assingLevels(monsterDAO, level, myLevel);
         }
         /**
          * int number = 1; for (Monster duplicate : duplicates) {
@@ -760,12 +762,19 @@ public class ExploreController {
         return monstersDAO;
     }
 
-    public MonsterDAO assingLevels(MonsterDAO monsters) {
+    public MonsterDAO assingLevels(MonsterDAO monsters, Long level, int myLevel) {
         Random rand = new Random();
         int random;
-
+        int intLevel = Math.toIntExact(level);
+        int myLevelMulti = myLevel / 5;
         MonsterDAO monster = monsters;
-        random = rand.nextInt(50) + 1;
+
+        if(monster.getLevel() == intLevel) {
+            random = rand.nextInt(50+myLevelMulti) + 1+myLevelMulti;
+        } else {
+            random = rand.nextInt(50+intLevel+myLevelMulti) + 1+(intLevel*2)+myLevelMulti;
+        }
+        
         monster.setLevel(random);
         monster.setId(monsters.getId());
         monster.setHealth((monster.getHealth() * random / 100) + monster.getHealth());
@@ -912,6 +921,7 @@ public class ExploreController {
     public MonsterDAO transformMonster(Monster monster) {
         MonsterDAO monsterDAO = new MonsterDAO();
         monsterDAO.setId(monster.getMonster_id());
+        monsterDAO.setLevel(monster.getLevel());
         monsterDAO.setAttack_speed(monster.getAttack_speed());
         monsterDAO.setBlock(monster.getBlock());
         monsterDAO.setBlock_chance(monster.getBlock_chance());
